@@ -67,7 +67,7 @@ DefineMatrixElemUnOp(OpImag)
 template <typename T,int N,class E>
 struct UnaryOp<OpSqr,Vector<T,N,E> > {
     typedef typename UnaryOp<OpSqr,T>::Result_t Result_t;
-    static Result_t apply(const Vector<T,N,E> &a) { 
+    static Result_t apply(const Vector<T,N,E> &a) {
         Result_t res = 0;
         for (int n = a.size(); n-- > 0;) {
             res += sqr(a(n));
@@ -310,7 +310,7 @@ template <int N,typename T1,class E1,typename T2>
 struct BinaryOp<OpMul,Vector<T1,N,E1>,T2> {
     typedef Vector<T1,N,E1> V;
     typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
-    typedef ScalarOp<T1,T2,OpMul> E;
+    typedef ScalarOp<V,T2,OpMul> E;
     typedef Vector<T,N,E> Result_t;
     static Result_t apply(const V &v,const T2 &s) { return Result_t(v,s); };
 };
@@ -341,11 +341,11 @@ struct BinaryOp<OpMul,Vector<T1,N1,E1>,Vector<T2,N2,E2> > {
     typedef Vector<T1,N1,E1> X1;
     typedef Vector<T2,N2,E2> X2;
     typedef typename BinaryOp<OpMul,T1,T2>::Result_t Result_t;
-    static Result_t apply(const X1 &x1,const X2 &x2) {
+    static Result_t apply(const X1 &v1,const X2 &v2) {
         CTAssert(N1 == 0 || N2 == 0 || N1 == N2);
         assert(v1.size() == v2.size());
         Result_t res = (Result_t)0;
-        for(int i=v1.size();i-->0;) res += v1(i)*v2(i);
+        for(int i=v1.size();i-->0;) res += BinaryOp<OpMul,T1,T2>::apply(v1(i),v2(i));
         return res;
     };
 };
