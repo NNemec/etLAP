@@ -137,7 +137,7 @@ template <typename T,class OpTag> struct TypeCombine<T,T,OpTag> { typedef T Resu
 #define DEFINE_NUMERIC_TYPE_COMBINE(RES,T1,T2) \
 template <class OpTag>                         \
 struct TypeCombine<T1,T2,OpTag> {              \
-    typedef float Result_t;                    \
+    typedef RES Result_t;                    \
     static RES cast(T1 a) { return a; };       \
     static RES cast(T2 a) { return a; };       \
 };

@@ -507,7 +507,7 @@ operator+=(Matrix<T1,R1,C1,E1> &m1,const Matrix<T2,R2,C2,E2> &m2) {
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
 inline const Matrix<T1,R1,C1,E1> &
 operator-=(Matrix<T1,R1,C1,E1> &m1,const Matrix<T2,R2,C2,E2> &m2) {
-    assign_add(m1,m2);
+    assign_sub(m1,m2);
     return m1;
 };
 

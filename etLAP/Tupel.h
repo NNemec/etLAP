@@ -33,9 +33,12 @@ class Tupel {
     explicit Tupel<T,N>(const T &t_) { for(int i=N;i-->0;) t[i]=t_; }
 
     Tupel<T,N>(const Tupel<T,N-1> &tp_,const T &t_) { for(int i=N-1;i-->0;) t[i]=tp_[i]; t[N-1] = t_; }
-    Tupel<T,N>(const T &t_,const Tupel<T,N-1> &tp_) { t[0] = t_; for(int i=N;i-->1;) t[i]=tp_[i-1]; }
+    Tupel<T,N>(const T &t_,const Tupel<T,N-1> &tp_) { t[0] = t_; for(int i=N-1;i-->0;) t[i+1]=tp_[i]; }
     template <int N1>
-    Tupel<T,N>(const Tupel<T,N1> &tp1_,const Tupel<T,N-N1> &tp2_) { int i=N; while(i-- > N1) t[i]=tp2_[i-N1]; while(i-->0) t[i]=tp1_[i]; }
+    Tupel<T,N>(const Tupel<T,N1> &tp1_,const Tupel<T,N-N1> &tp2_) {
+        for(int i=N-N1;i-->0;) t[i+N1]=tp2_[i];
+        for(int i=N1;i-->0;)   t[i]   =tp1_[i];
+    }
 
     Tupel<T,N-1> tail() { Tupel<T,N-1> res; for(int i=N-1;i-->0;) res[i]=t[i+1]; return res; }
     Tupel<T,N-1> head() { Tupel<T,N-1> res; for(int i=N-1;i-->0;) res[i]=t[i]; return res; }
