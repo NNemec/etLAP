@@ -99,7 +99,7 @@ class Matrix<std::complex<REAL>,N,N,TagSUNgenerator>
 
     int rows() const { return N; };
     int cols() const { return N; };
-    
+
     bool is_locked() const { return false; };
 };
 
@@ -111,14 +111,19 @@ inline Matrix<std::complex<REAL>,N,N,TagSUNgenerator> SUNgenerator(int idx) {
 
 template <int N,typename REAL>
 class SUNstructure_values {
-    REAL data[N*N*N*N*N*N];
-    REAL &dat(uint a,uint b,uint c) { return data[a*N*N*N*N + b*N*N + c]; }
-    REAL dat(uint a,uint b,uint c) const { return data[a*N*N*N*N + b*N*N + c]; }
+    bool _nonzero[N*N*N*N*N*N];
+    REAL _data[N*N*N*N*N*N];
+    REAL &data(uint a,uint b,uint c) { return _data[a*(N*N*N*N) + b*(N*N) + c]; }
+    REAL data(uint a,uint b,uint c) const { return _data[a*(N*N*N*N) + b*(N*N) + c]; }
+    bool &nonzero(uint a,uint b,uint c) { return _nonzero[a*(N*N*N*N) + b*(N*N) + c]; }
+    bool nonzero(uint a,uint b,uint c) const { return _nonzero[a*(N*N*N*N) + b*(N*N) + c]; }
 
   public:
     SUNstructure_values() {
-        for(uint i=0;i<N*N*N*N*N*N;i++)
-            data[i] = 0.0;
+        for(uint i=0;i<N*N*N*N*N*N;i++) {
+            _nonzero[i] = false;
+            _data[i] = 0.0;
+        };
 
         bool is_diag[N*N];
         for(uint i=0;i<N*N;i++)
@@ -128,18 +133,23 @@ class SUNstructure_values {
 
         for(uint a=1;a<N*N-2;a++)
         for(uint b=a+1;b<N*N-1;b++)
-        for(uint c=b+1;c<N*N;c++) {
-            REAL val;
-            if((is_diag[a] && is_diag[b]) || (is_diag[b] && is_diag[c]) || (is_diag[c] && is_diag[a]))
-                val = 0.0;
-            else
-                val = 2.0 * trace(imag(commute(SUNgenerator<N,REAL>(a),SUNgenerator<N,REAL>(b)) * SUNgenerator<N,REAL>(c)));
-            dat(a,b,c) = val;
-            dat(b,c,a) = val;
-            dat(c,a,b) = val;
-            dat(c,b,a) = -val;
-            dat(b,a,c) = -val;
-            dat(a,c,b) = -val;
+        for(uint c=b+1;c<N*N;c++)
+        if(!((is_diag[a] && is_diag[b]) || (is_diag[b] && is_diag[c]) || (is_diag[c] && is_diag[a]))) {
+            REAL val = 2.0 * trace(imag(commute(SUNgenerator<N,REAL>(a),SUNgenerator<N,REAL>(b)) * SUNgenerator<N,REAL>(c)));
+            if(val != 0.0) {
+                data(a,b,c) = val;
+                data(b,c,a) = val;
+                data(c,a,b) = val;
+                data(c,b,a) = -val;
+                data(b,a,c) = -val;
+                data(a,c,b) = -val;
+                nonzero(a,b,c) = true;
+                nonzero(b,c,a) = true;
+                nonzero(c,a,b) = true;
+                nonzero(c,b,a) = true;
+                nonzero(b,a,c) = true;
+                nonzero(a,c,b) = true;
+            };
         };
     };
 
@@ -147,7 +157,14 @@ class SUNstructure_values {
         assert(a > 0 && a < N*N);
         assert(b > 0 && b < N*N);
         assert(c > 0 && c < N*N);
-        return dat(a,b,c);
+        return data(a,b,c);
+    };
+
+    bool is_nonzero(uint a,uint b,uint c) {
+        assert(a > 0 && a < N*N);
+        assert(b > 0 && b < N*N);
+        assert(c > 0 && c < N*N);
+        return nonzero(a,b,c);
     };
 };
 
@@ -158,6 +175,13 @@ struct SUNstructure_values<1,REAL> {
         assert(b == 0);
         assert(c == 0);
         return 0.0;
+    };
+
+    bool is_nonzero(uint a,uint b,uint c) {
+        assert(a == 0);
+        assert(b == 0);
+        assert(c == 0);
+        return false;
     };
 };
 
@@ -171,12 +195,29 @@ struct SUNstructure_values<2,REAL> {
             return 0.0;
         return REAL((int)((4+b-a)%3)-1);
     };
+
+    bool is_nonzero(uint a,uint b,uint c) {
+        assert(a > 0 && a < 4);
+        assert(b > 0 && b < 4);
+        assert(c > 0 && c < 4);
+        return !(a==b || b==c || c==a);
+    };
+};
+
+template <int N,typename REAL>
+inline SUNstructure_values<N,REAL> &SUNstructure_val() {
+    static SUNstructure_values<N,REAL> value;
+    return value;
 };
 
 template <int N,typename REAL>
 inline REAL SUNstructure(uint a,uint b,uint c) {
-    static SUNstructure_values<N,REAL> value;
-    return value.value(a,b,c);
+    return SUNstructure_val<N,REAL>().value(a,b,c);
+};
+
+template <int N,typename REAL>
+inline bool SUNstructure_nonzero(uint a,uint b,uint c) {
+    return SUNstructure_val<N,REAL>().is_nonzero(a,b,c);
 };
 
 }; // namespace etLAP

@@ -1,4 +1,4 @@
-all: exp
+all: try_gsl
 
 CPPFLAGS =
 CPPFLAGS += -I.
@@ -11,13 +11,14 @@ CXXFLAGS =
 # $(CPPFLAGS)
 CXXFLAGS += -Wall
 #CXXFLAGS += -save-temps
-CXXFLAGS += -O3
-CXXFLAGS += -finline-limit=2000
+#CXXFLAGS += -O3
+#CXXFLAGS += -finline-limit=2000
 #CXXFLAGS += -finline-limit=5000
-CXXFLAGS += -funroll-loops
+#CXXFLAGS += -funroll-loops
 CXXFLAGS += -march=pentium
 #CXXFLAGS += -march=athlon
-#CXXFLAGS += -g
+CXXFLAGS += -g
+CXXFLAGS += -fno-inline
 
 #CXXFLAGS += -DASSIGN_POLICY=AP_norefs
 CXXFLAGS += -DASSIGN_POLICY=AP_manual
@@ -28,6 +29,9 @@ CXXFLAGS += -DASSIGN_POLICY=AP_manual
 CXX = g++-3.2
 #CXX = g++
 #CXX = mpiCC
+
+try_gsl: try_gsl.cpp etLAP/*.h Makefile
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) try_gsl.cpp -lgsl -lcblas -latlas -o try_gsl
 
 exp: exp.cpp etLAP/*.h Makefile
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) exp.cpp -o exp 
@@ -47,4 +51,4 @@ tryout: tryout.cpp etLAP/*.h Makefile
 
 clean:
 	rm -f *.ii *.o *.s
-	rm -f fexp vexp fsimple tryout
+	rm -f exp fsimple tryout try_gsl

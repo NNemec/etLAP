@@ -47,6 +47,18 @@ class Tupel {
     T &operator[](int i) { return t[i]; }
 };
 
+template <typename T>
+class Tupel<T,0> {
+  public:
+    Tupel<T,0>() {};
+    explicit Tupel<T,0>(const T &t_) {}
+
+    Tupel<T,0>(const Tupel<T,0> &tp1_,const Tupel<T,0> &tp2_) {}
+
+    const T operator[](int i) const { throw 0; }
+    T &operator[](int i) { throw 0; }
+};
+
 template <typename T,int N1,int N2>
 inline Tupel<T,N1+N2> operator,(const Tupel<T,N1> &t1,const Tupel<T,N2> &t2) {
     return Tupel<T,N1+N2>(t1,t2);

@@ -27,9 +27,17 @@ struct IF;
 template <typename IF_TRUE,typename IF_FALSE> struct IF<true,IF_TRUE,IF_FALSE> { typedef IF_TRUE T; };
 template <typename IF_TRUE,typename IF_FALSE> struct IF<false,IF_TRUE,IF_FALSE> { typedef IF_FALSE T; };
 
+template <typename A,typename B>
+struct TypeEqual { enum { res = false }; };
+
+template <typename A>
+struct TypeEqual<A,A> { enum { res = true }; };
+
 template<bool B> struct CTAssertClass {};
 template<> struct CTAssertClass<true> { static void test() {} };
 #define CTAssert(c) etLAP::CTAssertClass<(c)>::test()
+
+#define restrict __restrict__
 
 }; // namespace etLAP
 

@@ -102,10 +102,6 @@ class Common_Smart
 #endif
   public:
     Common_Smart<SAME,T>() { unlock(); }
-//    template<typename X>
-//    Common_Assignable<SAME,T>(const X &src) { unlock(); assign_from(src); };
-//    template<typename X>
-//    SAME &operator=(const X &src) { unlock(); assign_from(src); return *(SAME *)this; };
 
     template<typename X>
     void assign_from(const X &src) {

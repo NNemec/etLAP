@@ -443,3 +443,15 @@ g++-3.2 -DNDEBUG -Wall -O3 -finline-limit=2000 -funroll-loops -march=pentium -DA
 FIX D:   3 N: 10000000 tr:   107.5855 time:     1.6800
 VAR D:   3 N: 10000000 tr:   107.5855 time:     7.6600
 
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Wed Nov 13 13:50:09 CET 2002
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=pentium -DASSIGN_POLICY=AP_manual -I.
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.0400
+VAR D:   3 N: 10000000 tr:   107.5855 time:    12.6300
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Wed Nov 13 14:07:35 CET 2002
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=pentium -DASSIGN_POLICY=AP_manual -I.
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.0500
+VAR D:   3 N: 10000000 tr:   107.5855 time:    12.7200
+

@@ -163,6 +163,79 @@ inline const typename UnaryResult<T,OpAbs>::Result_t max(Matrix<T,R,C,E> a) {
     return res;
 };
 
+// simplemax(Matrix)
+template <typename T,int R,int C,class E>
+inline const typename UnaryResult<T,OpAbs>::Result_t simplemax(Matrix<T,R,C,E> a) {
+    typename UnaryResult<T,OpAbs>::Result_t res = 0;
+//inline const typeof(abs(T(0)) max(Matrix<T,R,C,E> a) {
+//    typeof(abs(T(0)) res = 0;
+    for (int r = a.rows(); r-- > 0;)
+    for (int c = a.cols(); c-- > 0;)
+        res = res >? fabs(a(r,c));
+    return res;
+};
+
+// simplemax(Matrix)
+template <typename T,int R,int C,class E>
+inline const typename UnaryResult<T,OpAbs>::Result_t simplemax(Matrix<std__complex<T>,R,C,E> a) {
+    typename UnaryResult<T,OpAbs>::Result_t res = 0;
+//inline const typeof(abs(T(0)) max(Matrix<T,R,C,E> a) {
+//    typeof(abs(T(0)) res = 0;
+    for (int r = a.rows(); r-- > 0;)
+    for (int c = a.cols(); c-- > 0;)
+        res = res >? fabs(real(a(r,c))) >? fabs(imag(a(r,c)));
+    return res;
+};
+
+
+// exp(Matrix)
+template <int N,typename T,class E>
+inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
+    assert(a.cols() == a.rows());
+
+    typedef typename UnaryResult<T,OpAbs>::Result_t REAL;
+    REAL max = simplemax(a);
+//mpi.locallog() << "max: " << max << "\n";
+    if(max > 10.0) {
+        // use product expansion exp(a) = lim_[n->inf] (1+a/n)^n
+        int lb_n = ilogb(max)+((TypeEqual<REAL,double>::res)?26:13);
+//mpi.locallog() << "lb_n: " << lb_n << "\n";
+        Matrix<T,N,N> res = 1 + a/exp2(lb_n);
+//mpi.locallog() << res;
+        while(lb_n-- > 0) {
+            res = buf(res*res);
+//mpi.locallog() << res;
+        };
+        return res;
+    } else {
+        // use product expansion exp(a) = sum[n] a^n/n!
+        int size = a.cols();
+        Matrix<T,N,N> res1(size,size);
+        Matrix<T,N,N> res2(size,size);
+        Matrix<T,N,N> tmp1(size,size);
+        Matrix<T,N,N> tmp2(size,size);
+        tmp1 = a*a/2;
+        res1 = 1 + a + tmp1;
+        for(int n=3;n<1000;n++) {
+            tmp2 = tmp1 * a / n;
+            res2 = res1+tmp2;
+            if(res1 == res2)
+                return res1;
+            n++;
+            tmp1 = tmp2 * a / n;
+            res1 = res2+tmp1;
+            if(res1 == res2)
+                return res1;
+        };
+        std::cerr << "exp(Matrix) failed!!\n";
+        std::cerr << a;
+        std::cerr << res1;
+        std::cerr << res2;
+        std::cerr << tmp1;
+        std::cerr << tmp2;
+        throw 0;
+    };
+};
 
 // buf(Vector)
 template <int N,typename T,class E>
@@ -222,9 +295,9 @@ struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpAdd> {
     enum { N = SizeCombine<N1,N2>::n };
     typedef ElemBinOp<X1,X2,OpAdd> E;
     typedef Vector<T,N,E> Result_t;
-    static Result_t apply(const X1 &x1,const X2 &x2) { return
+    static Result_t apply(const X1 &x1,const X2 &x2) {
         assert(x1.size() == x2.size());
-        Result_t(x1,x2);
+        return Result_t(x1,x2);
     };
 };
 
@@ -285,6 +358,22 @@ struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpMul> {
         Result_t res = (Result_t)0;
         for(int i=v1.size();i-->0;) res += v1(i)*v2(i);
         return res;
+    };
+};
+
+// Vector == Vector
+template <typename T1,int N1,class E1,typename T2,int N2,class E2>
+struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpIsEq> {
+    typedef Vector<T1,N1,E1> X1;
+    typedef Vector<T2,N2,E2> X2;
+    typedef bool Result_t;
+    static Result_t apply(const X1 &v1,const X2 &v2) {
+        CTAssert(N1 == 0 || N2 == 0 || N1 == N2);
+        assert(v1.size() == v2.size());
+        for(int i=v1.size();i-->0;)
+            if(! v1(i) == v2(i))
+                return false;
+        return true;
     };
 };
 
@@ -388,7 +477,7 @@ struct BinOp<T1,Matrix<T2,R,C,E2>,OpAdd> {
     typedef typename TypeCombine<T1,T2,OpAdd>::Result_t T;
     typedef ElemBinOp<X1,X2,OpAdd> E;
     typedef Matrix<T,R,C,E> Result_t;
-    static Result_t apply(const T1 &s,const X1 &m) {
+    static Result_t apply(const T1 &s,const X2 &m) {
         CTAssert(R == C);
         assert(m.rows() == m.cols());
         return Result_t(X1(m.rows(),s),m);
@@ -477,6 +566,23 @@ inline const Matrix<typename TypeCombine<T1,T2,OpMul>::Result_t,N,N> commute(con
         }
 };
 
+// Matrix == Matrix
+template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
+struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpIsEq> {
+    typedef Matrix<T1,R1,C1,E1> X1;
+    typedef Matrix<T2,R2,C2,E2> X2;
+    typedef bool Result_t;
+    static Result_t apply(const X1 &m1,const X2 &m2) {
+        CTAssert((R1 == 0 && C1 == 0) || (R2 == 0 && C2 == 0) || (R1 == R2 && C1 == C2));
+        assert(m1.rows() == m2.rows() && m1.cols() == m2.cols());
+        for(int r=m1.rows();r-->0;)
+        for(int c=m1.cols();c-->0;)
+            if(! (m1(r,c) == m2(r,c)))
+                return false;
+        return true;
+    };
+};
+
 
 
 /*******************************************************************************
@@ -518,6 +624,8 @@ DefineBinOp(OpAdd,operator+);
 DefineBinOp(OpSub,operator-);
 DefineBinOp(OpMul,operator*);
 DefineBinOp(OpDiv,operator/);
+DefineBinOp(OpIsEq,operator==);
+DefineBinOp(OpIsNeq,operator!=);
 
 /******************************************************************************
  * Assignment operators

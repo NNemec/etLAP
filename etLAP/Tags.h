@@ -83,6 +83,8 @@ class OpAdd;
 class OpSub;
 class OpMul;
 class OpDiv;
+class OpIsEq;
+class OpIsNeq;
 
 class OpRevMul;
 

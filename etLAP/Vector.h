@@ -65,11 +65,16 @@ class Vector<T,N,Smart>
     const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int sz_) { assert(sz_ == N); };
+    void clear() { for(int n=N;n-->0;) data[n] = (T)0; };
+
     const T operator() (int n) const { return data[n]; };
     T &operator() (int n,bool unsafe=false) { return data[n]; };
 
+    T *rawdata() { return &data[0]; };
+    // be careful with this one -- only use it if you know exactly what you are doing!
+
     int size() const { return N; };
-    
+
     void prepare_write_clone() {};
     void prepare_write_noclone() {};
 };
@@ -108,6 +113,9 @@ class Vector<T,0,Smart>
     const T operator() (int n) const { return data[n]; };
     T &operator() (int n,bool unsafe=false) { if(!unsafe)prepare_write_clone(); return data[n]; };
 
+    T *rawdata() { return data.rawdata(); };
+    // be careful with this one -- only use it if you know exactly what you are doing!
+
     int size() const { return sz; }
 
     void prepare_write_clone() { data.prepare_write_clone(); }
@@ -115,12 +123,12 @@ class Vector<T,0,Smart>
 };
 
 /*****************************************************************************
- *  Smart Array - Fixed size
+ *  Packed Array - Fixed size
  */
 
 template <int N,typename T>
 class Vector<T,N,Packed>
-: public Common_Packed<Vector<T,N,Smart>,T> {
+: public Common_Packed<Vector<T,N,Packed>,T> {
     typedef Packed E;
     typedef Vector<T,N,E> SAME;
 
@@ -139,8 +147,13 @@ class Vector<T,N,Packed>
     const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int sz_) { assert(sz_ == N); };
+    void clear() { for(int n=N;n-->0;) data[n] = (T)0; };
+
     const T operator() (int n) const { return data[n]; };
     T &operator() (int n,bool unsafe=false) { return data[n]; };
+
+    T *rawdata() { return &data[0]; };
+    // be careful with this one -- only use it if you know exactly what you are doing!
 
     int size() const { return N; };
 
@@ -175,7 +188,7 @@ inline void assign(Vector<TD,ND,ED> &dest,const Vector<TS,NS,ES> &src,CAST_TAG) 
 template <typename TD,int ND,class E,typename TS,int NS,class CAST_TAG>
 inline void assign(Vector<TD,ND,E> &dest,const Tupel<TS,NS> &src,CAST_TAG) {
     CTAssert(ND == NS || ND == 0);
-    dest.resize(N2);
+    dest.resize(NS);
     dest.prepare_write_noclone();
     for(int i=dest.size();i-->0;)
         dest(i,true) = TypeCast<TD,TS>::cast(src[i]);
@@ -191,7 +204,7 @@ class Vector<T,N,Zero>
     typedef Vector<T,N,Zero> SAME;
   public:
     typedef SAME Ref_t;
-    
+
     Vector<T,N,Zero>() {};
     T operator() (int n) const { return (T)0; }
     int size() const { return N; }
@@ -292,6 +305,23 @@ class Vector<T,N,Buffer>
     bool is_locked() const { return false; };
 };
 
+template <typename T>
+class Vector<T,0,Buffer>
+: public Common<Vector<T,0,Buffer> > {
+    typedef Buffer E;
+    typedef Vector<T,0,E> SAME;
+
+    Vector<T,0,Smart> buf;
+  public:
+    typedef SAME Ref_t;
+
+    template <class E1>
+    Vector<T,0,E>(const Vector<T,0,E1> &v_) : buf(v_) {};
+    T operator() (int n) const { return buf(n); };
+    int size() const { return buf.size(); };
+    bool is_locked() const { return false; };
+};
+
 template <int N,typename T,class E1>
 class Vector<T,N,NoBuffer<Vector<T,N,E1> > >
 : public Common<Vector<T,N,NoBuffer<Vector<T,N,E1> > > > {
@@ -319,7 +349,7 @@ class Vector<T,R,Multiplied<Matrix<T1,R,C,E1>,Vector<T2,C,E2> > >
     typedef Matrix<T1,R,C,E1> M;
     typedef Vector<T2,C,E2> V;
     typedef Multiplied<M,V> E;
-    typedef Vector<T,N,E> SAME;
+    typedef Vector<T,R,E> SAME;
 
     const typename M::Ref_t m;
     const typename V::Ref_t v;

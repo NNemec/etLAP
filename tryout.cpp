@@ -23,6 +23,7 @@
 #include <etLAP/Matrix.h>
 #include <etLAP/Operator.h>
 #include <etLAP/Output.h>
+#include <etLAP/Tupel.h>
 
 #include <iostream>
 #include <string>
@@ -33,6 +34,13 @@ using namespace etLAP;
 using namespace std;
 
 int main() {
+    Vector<double,2> L = tupel(1,1);
+    Vector<double,2> G = tupel(1,1);
+    Matrix<double,2,2> Q = 1;
+    Vector<double,2> res = Q*buf(G+Q*L);
+    cout << res << "\n";
+
+/*
     cout << sizeof(Matrix<char,1,1,Packed>) << "\n";
     Vector<Matrix<complex<double>,3,3>,4> v;
     cout << sizeof(v) << " " << typeid(v).name() << "\n";
@@ -42,4 +50,5 @@ int main() {
     cout << &(v(1)) << "\n";
 //    cout << &(v(0)(0,0)) << "\n";
 //    Vector<int,3> v = tupel(3,4,5);
+*/
 };

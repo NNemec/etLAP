@@ -151,6 +151,9 @@ class Storage {
         };
         souvereign = true;
     };
+    
+    T *rawdata() { return rep->data(); };
+    // be careful with this one -- only use it if you know exactly what you are doing!
 };
 
 }; // namespace etLAP

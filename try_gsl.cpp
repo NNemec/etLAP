@@ -17,25 +17,36 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <etLAP/SU_N.h>
-#include <etLAP/Operator.h>
+#include <etLAP/Matrix.h>
+#include <etLAP/gsl.h>
 #include <etLAP/Output.h>
 
-using namespace etLAP;
+#include <iostream>
+#include <string>
+#include <complex>
+#include <typeinfo>
 
-enum { DIM = 4 };
+using namespace etLAP;
+using namespace std;
 
 int main() {
+    Matrix<double,3,3> A = 2;
 /*
-    for(int a=1;a<DIM*DIM-2;a++)
-    for(int b=a+1;b<DIM*DIM-1;b++)
-    for(int c=b+1;c<DIM*DIM;c++)
+    A(0,0) = 4;
+    A(1,1) = 16;
+    A(2,2) = 25;
+    A(1,0) = A(0,1) = 2;
+    A(2,0) = A(0,2) = 3;
+    A(2,1) = A(1,2) = 4;
 */
+//    Matrix<double,3,3> B;
 
-    for(int a=1;a<DIM*DIM;a++)
-    for(int b=1;b<DIM*DIM;b++)
-    for(int c=1;c<DIM*DIM;c++)
-    if(SUNstructure_nonzero<DIM,double>(a,b,c))
-        std::cout << "f(" << a << "," << b << "," << c << ") = "
-                  << SUNstructure<DIM,double>(a,b,c) << "\n";
+    cout << A << "\n";
+
+    for(int i=0; i<10000000; i++)
+        A = gsl_inv_sqrt(A);
+
+    cout << A << "\n";
+//    cout << B << "\n";
+//    cout << B * A * B << "\n";
 };

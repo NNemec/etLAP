@@ -47,9 +47,9 @@ class Matrix<T,R,C,Smart>
     Matrix<T,R,C,E>(int rw_,int cl_) { assert(rw_ == R && cl_ == C); };
 
     template<typename X>
-    Matrix<T,R,C,E>(const X &src) { assign_from(src); };
+    Matrix<T,R,C,E>(const X &restrict src) { assign_from(src); };
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int rw_,int cl_) { assert(R == rw_ && C == cl_); };
     void clear() { for(int n=R*C;n-->0;) data[n] = (T)0; };
@@ -57,8 +57,11 @@ class Matrix<T,R,C,Smart>
     const T operator() (int r,int c) const { return data[r*C+c]; };
     T &operator() (int r,int c,bool unsafe=false) { return data[r*C+c]; };
 
-    const T operator() (int n) const { return data[n]; };
-    T &operator() (int n,bool unsafe=false) { return data[n]; };
+//    const T operator() (int n) const { return data[n]; };
+//    T &operator() (int n,bool unsafe=false) { return data[n]; };
+
+    T *rawdata() { return &data[0]; };
+    // be careful with this one -- only use it if you know exactly what you are doing!
 
     int rows() const { return R; };
     int cols() const { return C; };
@@ -96,9 +99,9 @@ class Matrix<T,0,0,Smart>
     Matrix<T,0,0,E>(int rw_,int cl_): rw(rw_),cl(cl_),data(rw*cl) {};
 
     template<typename X>
-    Matrix<T,0,0,E>(const X &src) { rw=-1; cl=-1; assign_from(src); };
+    Matrix<T,0,0,E>(const X &restrict src) { rw=-1; cl=-1; assign_from(src); };
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int rw_,int cl_) { rw=rw_;cl=cl_;data.resize(rw*cl); };
     void clear() { data.clear(); };
@@ -106,9 +109,12 @@ class Matrix<T,0,0,Smart>
     const T operator() (int r,int c) const { return data[r*cl + c]; };
     T &operator() (int r,int c,bool unsafe=false) { if(!unsafe)prepare_write_clone(); return data[r*cl + c]; };
 
-    const T operator() (int n) const { return data[n]; };
-    T &operator() (int n,bool unsafe) { if(!unsafe)prepare_write_clone(); return data[n]; };
+//    const T operator() (int n) const { return data[n]; };
+//    T &operator() (int n,bool unsafe) { if(!unsafe)prepare_write_clone(); return data[n]; };
 
+    T *rawdata() { return data.rawdata(); };
+    // be careful with this one -- only use it if you know exactly what you are doing!
+    
     int rows() const { return rw; }
     int cols() const { return cl; }
 
@@ -144,9 +150,9 @@ class Matrix<T,R,C,Packed>
     Matrix<T,R,C,E>(int rw_,int cl_) { assert(rw_ == R && cl_ == C); };
 
     template<typename X>
-    Matrix<T,R,C,E>(const X &src) { assign_from(src); };
+    Matrix<T,R,C,E>(const X &restrict src) { assign_from(src); };
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int rw_,int cl_) { assert(R == rw_ && C == cl_); };
     void clear() { for(int n=R*C;n-->0;) data[n] = (T)0; };
@@ -154,8 +160,11 @@ class Matrix<T,R,C,Packed>
     const T operator() (int r,int c) const { return data[r*C+c]; };
     T &operator() (int r,int c,bool unsafe=false) { return data[r*C+c]; };
 
-    const T operator() (int n) const { return data[n]; };
-    T &operator() (int n,bool unsafe=false) { return data[n]; };
+//    const T operator() (int n) const { return data[n]; };
+//    T &operator() (int n,bool unsafe=false) { return data[n]; };
+
+    T *rawdata() { return &data[0]; };
+    // be careful with this one -- only use it if you know exactly what you are doing!
 
     int rows() const { return R; };
     int cols() const { return C; };
@@ -191,9 +200,9 @@ class Matrix<T,R,C,ExtPtr>
     Matrix<T,R,C,E>(T *ptr_): ptr(ptr_) { };
     Matrix<T,R,C,E>(T *ptr_,int rw_,int cl_): ptr(ptr_) { assert(rw_==R && cl_ == C); }; // for usage in mdp
 
-    Matrix<T,R,C,E>(const SAME &other): ptr(other.ptr) {};
+    Matrix<T,R,C,E>(const SAME &restrict other): ptr(other.ptr) {};
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int rw_,int cl_) { assert(R == rw_ && C == cl_); };
     void clear() { for(int i=R*C;i-->0;) ptr[i] = (T)0; };
@@ -229,9 +238,9 @@ class Matrix<T,0,0,ExtPtr>
     typedef SAME Ref_t;
 
     Matrix<T,0,0,E>(T *ptr_,int rw_,int cl_): rw(rw_),cl(cl_),ptr(ptr_) {};
-    Matrix<T,0,0,E>(const SAME &other): rw(other.rw),cl(other.cl),ptr(other.ptr) {};
+    Matrix<T,0,0,E>(const SAME &restrict other): rw(other.rw),cl(other.cl),ptr(other.ptr) {};
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int rw_,int cl_) { rw = rw_; cl = cl_; };
     void clear() { for(int i=rw*cl;i-->0;) ptr[i] = (T)0; };
@@ -254,7 +263,7 @@ class Matrix<T,0,0,ExtPtr>
 // Matrix = Matrix
 
 template <typename TD,int RD,int CD,class ED,typename TS,int RS,int CS,class ES>
-inline void assign(Matrix<TD,RD,CD,ED> &dest,const Matrix<TS,RS,CS,ES> &src,NoCast) {
+inline void assign(Matrix<TD,RD,CD,ED> &restrict dest,const Matrix<TS,RS,CS,ES> &restrict src,NoCast) {
     CTAssert((RD == RS && CD == CS) || (RD==0 && CD==0) || (RS==0 && CS==0));
     dest.resize(src.rows(),src.cols());
     dest.prepare_write_noclone();
@@ -271,7 +280,7 @@ inline void assign(Matrix<TD,RD,CD,ED> &dest,const Matrix<TS,RS,CS,ES> &src,NoCa
 // Matrix += Matrix
 
 template <typename TD,int RD,int CD,class ED,typename TS,int RS,int CS,class ES>
-inline void assign_add(Matrix<TD,RD,CD,ED> &dest,const Matrix<TS,RS,CS,ES> &src) {
+inline void assign_add(Matrix<TD,RD,CD,ED> &restrict dest,const Matrix<TS,RS,CS,ES> &restrict src) {
     CTAssert((RD == RS && CD == CS) || (RD==0 && CD==0));
     assert(dest.rows() == src.rows() && dest.cols() == src.cols());
     dest.prepare_write_clone();
@@ -288,7 +297,7 @@ inline void assign_add(Matrix<TD,RD,CD,ED> &dest,const Matrix<TS,RS,CS,ES> &src)
 // Matrix -= Matrix
 
 template <typename TD,int RD,int CD,class ED,typename TS,int RS,int CS,class ES>
-inline void assign_sub(Matrix<TD,RD,CD,ED> &dest,const Matrix<TS,RS,CS,ES> &src) {
+inline void assign_sub(Matrix<TD,RD,CD,ED> &restrict dest,const Matrix<TS,RS,CS,ES> &restrict src) {
     CTAssert((RD == RS && CD == CS) || (RD==0 && CD==0));
     assert(dest.rows() == src.rows() && dest.cols() == src.cols());
     dest.prepare_write_clone();
@@ -305,7 +314,7 @@ inline void assign_sub(Matrix<TD,RD,CD,ED> &dest,const Matrix<TS,RS,CS,ES> &src)
 // Matrix = Scalar
 
 template <int N,typename TD,class ED,typename TS>
-inline void assign(Matrix<TD,N,N,ED> &dest,const TS &s,TypeCast<TD,TS>) {
+inline void assign(Matrix<TD,N,N,ED> &restrict dest,const TS &restrict s,TypeCast<TD,TS>) {
     assert(dest.rows() == dest.cols());
     dest.clear();
     for(int n=dest.rows();n-->0;)
@@ -315,7 +324,7 @@ inline void assign(Matrix<TD,N,N,ED> &dest,const TS &s,TypeCast<TD,TS>) {
 // Matrix *= Scalar
 
 template <typename TD,int R,int C,class E,typename TS>
-inline void assign_mul(Matrix<TD,R,C,E> &dest,TS s) {
+inline void assign_mul(Matrix<TD,R,C,E> &restrict dest,TS s) {
     dest.prepare_write_clone();
 #ifndef FLATLOOP
     for(int r=dest.rows();r-->0;)
@@ -330,7 +339,7 @@ inline void assign_mul(Matrix<TD,R,C,E> &dest,TS s) {
 // Matrix /= Scalar
 
 template <typename TD,int R,int C,class E,typename TS>
-inline void assign_div(Matrix<TD,R,C,E> &dest,TS s) {
+inline void assign_div(Matrix<TD,R,C,E> &restrict dest,TS s) {
     dest.prepare_write_clone();
 #ifndef FLATLOOP
     for(int r=dest.rows();r-->0;)
@@ -345,7 +354,7 @@ inline void assign_div(Matrix<TD,R,C,E> &dest,TS s) {
 // Matrix<N,N> = Vector<N>
 
 template <typename TD,int ND,class ED,typename TS,int NS,class ES>
-inline void assign(Matrix<TD,ND,ND,ED> &dest,const Vector<TS,NS,ES> &src,NoCast) {
+inline void assign(Matrix<TD,ND,ND,ED> &restrict dest,const Vector<TS,NS,ES> &restrict src,NoCast) {
     CTAssert(ND == NS || ND==0);
     dest.resize(src.size(),src.size());
     dest.clear();
@@ -356,7 +365,7 @@ inline void assign(Matrix<TD,ND,ND,ED> &dest,const Vector<TS,NS,ES> &src,NoCast)
 // Matrix<N,1> = Vector<N>
 
 template <typename TD,int RD,class ED,typename TS,int RS,class ES>
-inline void assign(Matrix<TD,RD,1,ED> &dest,const Vector<TS,RS,ES> &src,NoCast) {
+inline void assign(Matrix<TD,RD,1,ED> &restrict dest,const Vector<TS,RS,ES> &restrict src,NoCast) {
     CTAssert(RS == 0 || RD == RS);
     assert(dest.rows() == src.size());
     for(int r=dest.rows();r-->0;)
@@ -370,7 +379,7 @@ inline void assign(Matrix<TD,RD,1,ED> &dest,const Vector<TS,RS,ES> &src,NoCast) 
 // Matrix<1,N> = Vector<N>
 
 template <typename TD,int CD,class ED,typename TS,int CS,class ES>
-inline void assign(Matrix<TD,1,CD,ED> &dest,const Vector<TS,CS,ES> &src,NoCast) {
+inline void assign(Matrix<TD,1,CD,ED> &restrict dest,const Vector<TS,CS,ES> &restrict src,NoCast) {
     CTAssert(CS == 0 || CD == CS);
     assert(dest.cols() == src.size());
     for(int c=dest.cols();c-->0;)
@@ -398,9 +407,9 @@ class Matrix<N,N,T,Diagonal>
     typedef SAME Ref_t;
 
     Matrix<N,N,T,E>() {};
-//    Matrix<N,N,T,E>(const SAME &other): data(other.data) {};
+//    Matrix<N,N,T,E>(const SAME &restrict other): data(other.data) {};
     template<typename X>
-    Matrix<N,N,T,E>(const X &src) { assign_from(src); };
+    Matrix<N,N,T,E>(const X &restrict src) { assign_from(src); };
     template<typename X>
     SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
 
@@ -440,15 +449,15 @@ class Matrix<T,N,N,Scalar>
   public:
     typedef SAME Ref_t;
 
-    Matrix<T,N,N,E>() {};
-    Matrix<T,N,N,E>(int sz_) { assert(sz_ == N); };
+//    Matrix<T,N,N,E>() {};
+//    Matrix<T,N,N,E>(int sz_) { assert(sz_ == N); };
     Matrix<T,N,N,E>(T s_): s(s_) {};
     Matrix<T,N,N,E>(int sz_,T s_): s(s_) { assert(sz_ == N); };
 
     template<typename X>
-    Matrix<T,N,N,E>(const X &src) { assign_from(src); };
+    Matrix<T,N,N,E>(const X &restrict src) { assign_from(src); };
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     const T operator() (int r,int c) const { return r==c?s:(T)0; }
     T &operator() () { return s; }
@@ -470,19 +479,14 @@ class Matrix<T,0,0,Scalar>
     typedef SAME Ref_t;
 
     Matrix<T,0,0,E>(): sz(0) {};
-    Matrix<T,0,0,E>(int sz_): sz(sz_) {};
-    Matrix<T,0,0,E>(T s_): sz(sz_), s(s_) {};
+//    Matrix<T,0,0,E>(int sz_): sz(sz_) {};
+//    Matrix<T,0,0,E>(T s_): sz(sz_), s(s_) {};
     Matrix<T,0,0,E>(int sz_,T s_): sz(sz_),s(s_) {};
 
     template<typename X>
-    Matrix<T,0,0,E>(const X &src) { rw=-1; cl=-1; assign_from(src); };
+    Matrix<T,0,0,E>(const X &restrict src) { assign_from(src); };
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
-
-    template<typename X>
-    Matrix<T,0,0,E>(const X &src) { assign_from(src); };
-    template<typename X>
-    SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     const T operator() (int r,int c) const { return r==c?s:(T)0; }
     T &operator() () { return s; }
@@ -493,7 +497,7 @@ class Matrix<T,0,0,Scalar>
 };
 
 template <int N,typename TD,typename TS>
-inline void assign(Matrix<TD,N,N,Scalar> &dest,TS s,TypeCast<TD,TS>*) {
+inline void assign(Matrix<TD,N,N,Scalar> &restrict dest,TS s,TypeCast<TD,TS>*) {
     dest() = TypeCast<TD,TS>::cast(s);
 };
 
@@ -577,7 +581,7 @@ class Matrix<T,R,C,ElemUnOp<Matrix<T1,R,C,E1>,Op> >
   public:
     typedef SAME Ref_t;
 
-    Matrix<T,R,C,E>(const M &m_) : m(m_) {}
+    Matrix<T,R,C,E>(const M &restrict m_) : m(m_) {}
     const T operator() (int r,int c) const { return apply((Op*)0,m(r,c)); }
     const T operator() (int n) const { return apply((Op*)0,m(n)); }
     int rows() const { return m.rows(); };
@@ -598,7 +602,7 @@ class Matrix<T,R,C,ElemBinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,Op> >
   public:
     typedef SAME Ref_t;
 
-    Matrix<T,R,C,E>(const M1 &m1_, const M2 &m2_) : m1(m1_), m2(m2_) {}
+    Matrix<T,R,C,E>(const M1 &restrict m1_, const M2 &restrict m2_) : m1(m1_), m2(m2_) {}
     const T operator() (int r,int c) const { return apply((Op*)0,m1(r,c), m2(r,c)); }
     const T operator() (int n) const { return apply((Op*)0,m1(n), m2(n)); }
     int rows() const { return m1.rows(); };
@@ -617,7 +621,7 @@ class Matrix<T,R,C,Transposed<Matrix<T,C,R,E1> > >
   public:
     typedef SAME Ref_t;
 
-    Matrix<T,R,C,E>(const M &m_) : m(m_) {}
+    Matrix<T,R,C,E>(const M &restrict m_) : m(m_) {}
     const T operator() (int r,int c) const { return m(c,r); }
     const T operator() (int n) const { return m(n); }
     int rows() const { return m.cols(); };
@@ -638,7 +642,7 @@ class Matrix<T,R,C,ScalarOp<Matrix<T1,R,C,E1>,T2,Op> >
   public:
     typedef SAME Ref_t;
 
-    Matrix<T,R,C,E>(const M &m_, T2 s_) : m(m_), s(s_) {}
+    Matrix<T,R,C,E>(const M &restrict m_, T2 s_) : m(m_), s(s_) {}
     const T operator() (int r,int c) const { return apply((Op*)0, m(r,c), s); }
     const T operator() (int n) const { return apply((Op*)0, m(n), s); }
     int rows() const { return m.rows(); };
@@ -661,7 +665,7 @@ class Matrix<T,R,1,Column<Vector<T1,R,E1> > >
   public:
     typedef SAME Ref_t;
 
-    Matrix<T,R,1,E>(const V &v_) : v(v_) {}
+    Matrix<T,R,1,E>(const V &restrict v_) : v(v_) {}
     const T operator() (int r,int c) const { return v(r); }
     const T operator() (int n) const { return v(r); }
     int rows() const { return v.size(); };
@@ -680,7 +684,7 @@ class Matrix<T,1,C,Row<Vector<T1,C,E1> > >
   public:
     typedef SAME Ref_t;
 
-    Matrix<T,1,C,E>(const V &v_) : v(v_) {};
+    Matrix<T,1,C,E>(const V &restrict v_) : v(v_) {};
     const T operator() (int r,int c) const { return v(c); };
     const T operator() (int n) const { return v(c); };
     int rows() const { return 1; };
@@ -703,7 +707,7 @@ class Matrix<T,R,C,Buffer>
     typedef SAME Ref_t;
 
     template <class E1>
-    Matrix<T,R,C,E>(const Matrix<T,R,C,E1> &m_): buf(m_) {};
+    Matrix<T,R,C,E>(const Matrix<T,R,C,E1> &restrict m_): buf(m_) {};
     const T operator() (int r,int c) const { return buf(r,c); };
     const T operator() (int n) const { return buf(n); };
     int rows() const { return buf.rows(); };
@@ -726,7 +730,7 @@ class Matrix<T,0,0,Buffer>
     typedef SAME Ref_t;
 
     template <class E1>
-    Matrix<T,0,0,E>(const Matrix<T,0,0,E1> &m_): buf(m_) {};
+    Matrix<T,0,0,E>(const Matrix<T,0,0,E1> &restrict m_): buf(m_) {};
     const T operator() (int r,int c) const { return buf(r,c); };
     const T operator() (int n) const { return buf(n); };
     int rows() const { return buf.rows(); };
@@ -749,7 +753,7 @@ class Matrix<T,R,C,NoBuffer<Matrix<T,R,C,E1> > >
   public:
     typedef SAME Ref_t;
 
-    Matrix<T,R,C,E>(const M &m_) : m(m_) {}
+    Matrix<T,R,C,E>(const M &restrict m_) : m(m_) {}
     const T operator() (int r,int c) const { return m(r,c); }
     const T operator() (int n) const { return m(n); }
     int rows() const { return m.rows(); };
@@ -774,7 +778,7 @@ class Matrix<T,R,C,Multiplied<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > >
   public:
     typedef SAME Ref_t;
 
-    Matrix<T,R,C,E>(const M1 &m1_, const M2 &m2_) : m1(m1_), m2(m2_) {}
+    Matrix<T,R,C,E>(const M1 &restrict m1_, const M2 &restrict m2_) : m1(m1_), m2(m2_) {}
 
     const T operator() (int r,int c) const {
         T res = 0;
