@@ -28,7 +28,6 @@
 #define AP_automatic 2
 #define AP_conservative 3
 #define AP_norefs 4
-#define AP_packed 5
 
 #ifndef etLAP_DEFAULT_ENGINE
 #define etLAP_DEFAULT_ENGINE Smart
@@ -57,11 +56,10 @@ class Matrix;
 
 #include "Util.h"
 #include "Types.h"
-#include "Costs.h"
+#include "Traits.h"
 #include "Storage.h"
 
 #ifdef DEBUG
-//#include "Output.h"
 #include <typeinfo>
 #endif
 

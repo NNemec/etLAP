@@ -2,8 +2,8 @@ all: try_gsl
 
 CPPFLAGS =
 CPPFLAGS += -I.
-#CPPFLAGS += -DNDEBUG
-#CPPFLAGS += -DFLATLOOP
+CPPFLAGS += -DNDEBUG
+#CPPFLAGS += -DNO_FLATLOOP
 #CPPFLAGS += -DTWODIMARRAY
 #CPPFLAGS += -DDEBUG
 
@@ -11,14 +11,17 @@ CXXFLAGS =
 # $(CPPFLAGS)
 CXXFLAGS += -Wall
 #CXXFLAGS += -save-temps
-#CXXFLAGS += -O3
-#CXXFLAGS += -finline-limit=2000
+CXXFLAGS += -O3
+CXXFLAGS += -finline-limit=2000
 #CXXFLAGS += -finline-limit=5000
-#CXXFLAGS += -funroll-loops
-CXXFLAGS += -march=pentium
-#CXXFLAGS += -march=athlon
-CXXFLAGS += -g
-CXXFLAGS += -fno-inline
+CXXFLAGS += -funroll-loops
+#CXXFLAGS += -march=pentium
+CXXFLAGS += -march=athlon
+CXXFLAGS += -mfpmath=sse
+CXXFLAGS += -mmmx
+CXXFLAGS += -msse
+#CXXFLAGS += -g
+#CXXFLAGS += -fno-inline
 
 #CXXFLAGS += -DASSIGN_POLICY=AP_norefs
 CXXFLAGS += -DASSIGN_POLICY=AP_manual

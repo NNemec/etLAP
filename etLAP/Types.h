@@ -37,42 +37,19 @@ class complex;
 
 namespace etLAP {
 
-#if 0
-template <typename T> SafeCast {};
-template <> struct SafeCast<int> {
-    static int cast(int a) { return a; }
-};
-template <> struct SafeCast<float> {
-    static float cast(int a) { return a; }
-    static float cast(double a) { return a; }
-};
-template <> struct SafeCast<double> {
-    static double cast(int a) { return a; }
-    static double cast(float a) { return a; }
-    static double cast(double a) { return a; }
-};
-template <T> struct SafeCast<std__complex<T> > {
-    static std__complex<T> cast(std_complex<T> a) { return a; }
-    template <T1>
-    static std__complex<T> cast(std_complex<T1> a) { return std__complex<T>(SafeCast<T>::cast(real(a)),SafeCast<T>::cast(real(a)));
-    template <T1>
-    static std__complex<T> cast(T1 a) { return std__complex<T>(SafeCast<T>::cast(a)); };
-};
-#endif
-
 /*******************************************************************************
  * TypeCast
  */
 class NoCast {};
 typedef class NoClass {} *NoType;
 template <typename Dest,typename Src> struct TypeCast {
-    enum { valid = false };
+    static const bool valid = false;
     typedef NoCast Cast_t;
     typedef NoType Dest_t;
 };
 
 template <typename T> struct TypeCast<T,T> {
-    enum { valid = true };
+    static const bool valid = true;
     typedef TypeCast<T,T> Cast_t;
     typedef T      Dest_t;
     static T cast(T x) { return x; }
@@ -80,7 +57,7 @@ template <typename T> struct TypeCast<T,T> {
 
 #define DEFINE_NUMERIC_CAST(TO,FROM)     \
 template <> struct TypeCast<TO,FROM>     { \
-    enum { valid = true };                 \
+    static const bool valid = true;        \
     typedef TypeCast<TO,FROM> Cast_t;      \
     typedef TO Dest_t;                     \
     static TO cast(FROM x) { return x; }   \
@@ -97,7 +74,7 @@ DEFINE_NUMERIC_CAST(long double,double)
 
 template <typename Dest,typename Src>
 struct TypeCast<std__complex<Dest>,std__complex<Src> > {
-    enum { valid = TypeCast<Dest,Src>::valid };
+    static const bool valid = TypeCast<Dest,Src>::valid;
     typedef typename IF<valid,TypeCast<std__complex<Dest>,std__complex<Src> >,NoCast>::T Cast_t;
     typedef typename IF<valid,std__complex<typename TypeCast<Dest,Src>::Dest_t>,NoType>::T Dest_t;
     static std__complex<Dest> cast(std__complex<Src> x) { return std__complex<Dest>(TypeCast<Dest,Src>::cast(real(x)),TypeCast<Dest,Src>::cast(imag(x))); };
@@ -105,7 +82,7 @@ struct TypeCast<std__complex<Dest>,std__complex<Src> > {
 
 template <typename Dest,typename Src>
 struct TypeCast<std__complex<Dest>,Src > {
-    enum { valid = TypeCast<Dest,Src>::valid };
+    static const bool valid = TypeCast<Dest,Src>::valid;
     typedef typename IF<valid,TypeCast<std__complex<Dest>,Src >,NoCast>::T Cast_t;
     typedef typename IF<valid,std__complex<typename TypeCast<Dest,Src>::Dest_t>,NoType>::T Dest_t;
     static std__complex<Dest> cast(Src x) { return std__complex<Dest>(TypeCast<Dest,Src>::cast(x)); };
@@ -113,7 +90,7 @@ struct TypeCast<std__complex<Dest>,Src > {
 
 template <typename T>
 struct TypeCast<std__complex<T>,std__complex<T> > {
-    enum { valid = true };
+    static const bool valid = true;
     typedef TypeCast<std__complex<T>,std__complex<T> > Cast_t;
     typedef std__complex<T> Dest_t;
     static std__complex<T> cast(std__complex<T> x) { return x; };
@@ -191,16 +168,16 @@ template <int N1,int N2>
 struct SizeCombine;
 
 template <int N>
-struct SizeCombine<N,N> { enum { n = N }; };
+struct SizeCombine<N,N> { static const int n = N; };
 
 template <int N>
-struct SizeCombine<0,N> { enum { n = N }; };
+struct SizeCombine<0,N> { static const int n = N; };
 
 template <int N>
-struct SizeCombine<N,0> { enum { n = N }; };
+struct SizeCombine<N,0> { static const int n = N; };
 
 template <>
-struct SizeCombine<0,0> { enum { n = 0 }; };
+struct SizeCombine<0,0> { static const int n = 0; };
 
 
 }; // namespace etLAP

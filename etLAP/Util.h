@@ -28,10 +28,10 @@ template <typename IF_TRUE,typename IF_FALSE> struct IF<true,IF_TRUE,IF_FALSE> {
 template <typename IF_TRUE,typename IF_FALSE> struct IF<false,IF_TRUE,IF_FALSE> { typedef IF_FALSE T; };
 
 template <typename A,typename B>
-struct TypeEqual { enum { res = false }; };
+struct TypeEqual { static const bool res = false; };
 
 template <typename A>
-struct TypeEqual<A,A> { enum { res = true }; };
+struct TypeEqual<A,A> { static const bool res = true; };
 
 template<bool B> struct CTAssertClass {};
 template<> struct CTAssertClass<true> { static void test() {} };

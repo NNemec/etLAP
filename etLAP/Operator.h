@@ -195,17 +195,12 @@ inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
 
     typedef typename UnaryResult<T,OpAbs>::Result_t REAL;
     REAL max = simplemax(a);
-//mpi.locallog() << "max: " << max << "\n";
     if(max > 10.0) {
         // use product expansion exp(a) = lim_[n->inf] (1+a/n)^n
         int lb_n = ilogb(max)+((TypeEqual<REAL,double>::res)?26:13);
-//mpi.locallog() << "lb_n: " << lb_n << "\n";
         Matrix<T,N,N> res = 1 + a/exp2(lb_n);
-//mpi.locallog() << res;
-        while(lb_n-- > 0) {
+        while(lb_n-- > 0)
             res = buf(res*res);
-//mpi.locallog() << res;
-        };
         return res;
     } else {
         // use product expansion exp(a) = sum[n] a^n/n!
@@ -292,7 +287,7 @@ struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpAdd> {
     typedef Vector<T1,N1,E1> X1;
     typedef Vector<T2,N2,E2> X2;
     typedef typename TypeCombine<T1,T2,OpAdd>::Result_t T;
-    enum { N = SizeCombine<N1,N2>::n };
+    static const int N = SizeCombine<N1,N2>::n;
     typedef ElemBinOp<X1,X2,OpAdd> E;
     typedef Vector<T,N,E> Result_t;
     static Result_t apply(const X1 &x1,const X2 &x2) {
@@ -307,7 +302,7 @@ struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpSub> {
     typedef Vector<T1,N1,E1> X1;
     typedef Vector<T2,N2,E2> X2;
     typedef typename TypeCombine<T1,T2,OpSub>::Result_t T;
-    enum { N = SizeCombine<N1,N2>::n };
+    static const int N = SizeCombine<N1,N2>::n;
     typedef ElemBinOp<X1,X2,OpSub> E;
     typedef Vector<T,N,E> Result_t;
     static Result_t apply(const X1 &x1,const X2 &x2) {
@@ -383,8 +378,8 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpAdd> {
     typedef Matrix<T1,R1,C1,E1> X1;
     typedef Matrix<T2,R2,C2,E2> X2;
     typedef typename TypeCombine<T1,T2,OpAdd>::Result_t T;
-    enum { R = SizeCombine<R1,R2>::n };
-    enum { C = SizeCombine<C1,C2>::n };
+    static const int R = SizeCombine<R1,R2>::n;
+    static const int C = SizeCombine<C1,C2>::n;
     typedef ElemBinOp<X1,X2,OpAdd> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const X1 &x1,const X2 &x2) {
@@ -399,8 +394,8 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpSub> {
     typedef Matrix<T1,R1,C1,E1> X1;
     typedef Matrix<T2,R2,C2,E2> X2;
     typedef typename TypeCombine<T1,T2,OpSub>::Result_t T;
-    enum { R = SizeCombine<R1,R2>::n };
-    enum { C = SizeCombine<C1,C2>::n };
+    static const int R = SizeCombine<R1,R2>::n;
+    static const int C = SizeCombine<C1,C2>::n;
     typedef ElemBinOp<X1,X2,OpSub> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const X1 &x1,const X2 &x2) {
@@ -502,15 +497,15 @@ struct BinOp<T1,Matrix<T2,R,C,E2>,OpSub> {
 // Matrix * Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
 struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpMul> {
-    enum { M=SizeCombine<C1,R2>::n };
-    enum { factor = (M==0?1:M-1) };
+    static const int M=SizeCombine<C1,R2>::n;
+    static const int factor = (M==0?1:M-1);
     typedef Matrix<T1,R1,C1,E1> X1;
-    typedef typename IF<(factor*Costs<E1>::c > 2),Matrix<T1,R1,C1,Buffer>,X1>::T X1_buf;
+    typedef typename IF<(factor*Traits<E1>::costs > 2),Matrix<T1,R1,C1,Buffer>,X1>::T X1_buf;
     typedef Matrix<T2,R2,C2,E2> X2;
-    typedef typename IF<(factor*Costs<E2>::c > 2),Matrix<T2,R2,C2,Buffer>,X2>::T X2_buf;
+    typedef typename IF<(factor*Traits<E2>::costs > 2),Matrix<T2,R2,C2,Buffer>,X2>::T X2_buf;
     typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
-    enum { R = C2?R1:0 };
-    enum { C = R1?C2:0 };
+    static const int R = C2?R1:0;
+    static const int C = R1?C2:0;
     typedef Multiplied<X1_buf,X2_buf> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.cols() == x2.rows()); return Result_t(x1,x2); };
@@ -519,11 +514,11 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpMul> {
 // Vector * Matrix
 template <typename T1,int N1,class E1,typename T2,int R2,int C2,class E2>
 struct BinOp<Vector<T1,N1,E1>,Matrix<T2,R2,C2,E2>,OpMul> {
-    enum { factor = (N1==0?1:N1-1) };
+    static const int factor = (N1==0?1:N1-1);
     typedef Vector<T1,N1,E1> X1;
-    typedef typename IF<(factor*Costs<E1>::c > 2),Vector<T1,N1,Buffer>,X1>::T X1_buf;
+    typedef typename IF<(factor*Traits<E1>::costs > 2),Vector<T1,N1,Buffer>,X1>::T X1_buf;
     typedef Matrix<T2,R2,C2,E2> X2;
-    typedef typename IF<(factor*Costs<E2>::c > 2),Matrix<T2,R2,C2,Buffer>,X2>::T X2_buf;
+    typedef typename IF<(factor*Traits<E2>::costs > 2),Matrix<T2,R2,C2,Buffer>,X2>::T X2_buf;
     typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
     typedef Multiplied<X1_buf,X2_buf> E;
     typedef Vector<T,C2,E> Result_t;
@@ -533,11 +528,11 @@ struct BinOp<Vector<T1,N1,E1>,Matrix<T2,R2,C2,E2>,OpMul> {
 // Matrix * Vector
 template <typename T1,int R1,int C1,class E1,typename T2,int N2,class E2>
 struct BinOp<Matrix<T1,R1,C1,E1>,Vector<T2,N2,E2>,OpMul> {
-    enum { factor = (N2==0?1:N2-1) };
+    static const int factor = (N2==0?1:N2-1);
     typedef Matrix<T1,R1,C1,E1> X1;
-    typedef typename IF<(factor*Costs<E1>::c > 2),Matrix<T1,R1,C1,Buffer>,X1>::T X1_buf;
+    typedef typename IF<(factor*Traits<E1>::costs > 2),Matrix<T1,R1,C1,Buffer>,X1>::T X1_buf;
     typedef Vector<T2,N2,E2> X2;
-    typedef typename IF<(factor*Costs<E2>::c > 2),Vector<T2,N2,Buffer>,X2>::T X2_buf;
+    typedef typename IF<(factor*Traits<E2>::costs > 2),Vector<T2,N2,Buffer>,X2>::T X2_buf;
     typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
     typedef Multiplied<X1_buf,X2_buf> E;
     typedef Vector<T,R1,E> Result_t;
@@ -548,8 +543,8 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Vector<T2,N2,E2>,OpMul> {
 template <int N,typename T1,class E1,typename T2,class E2>
 inline const Matrix<typename TypeCombine<T1,T2,OpMul>::Result_t,N,N> commute(const Matrix<T1,N,N,E1> &m1,const Matrix<T2,N,N,E2> &m2) {
     typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
-    if(Costs<E1>::c > 0)
-        if(Costs<E2>::c > 0) {
+    if(Traits<E1>::costs > 0)
+        if(Traits<E2>::costs > 0) {
             Matrix<T,N,N> tmp1 = m1;
             Matrix<T,N,N> tmp2 = m2;
             return tmp1*tmp2-tmp2*tmp1;
@@ -558,7 +553,7 @@ inline const Matrix<typename TypeCombine<T1,T2,OpMul>::Result_t,N,N> commute(con
             return tmp1*m2-m2*tmp1;
         }
     else
-        if(Costs<E2>::c > 0) {
+        if(Traits<E2>::costs > 0) {
             Matrix<T,N,N> tmp1 = m1;
             return tmp1*m2-m2*tmp1;
         } else {

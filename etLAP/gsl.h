@@ -68,6 +68,67 @@ struct gsl_inv_sqrt_workspace {
     ~gsl_inv_sqrt_workspace() {
         gsl_eigen_symmv_free(gsl_workspace);
     };
+
+    void resize(int _size) {
+	assert(_size == N);
+    };
+};
+
+template <>
+struct gsl_inv_sqrt_workspace<0> {
+    int size;
+
+    gsl_eigen_symmv_workspace *gsl_workspace;
+
+    gsl_matrix gsl_res;
+
+    Vector<double,0> D;
+    gsl_vector gsl_D;
+
+    Matrix<double,0,0> U;
+    gsl_matrix gsl_U;
+
+    gsl_inv_sqrt_workspace() {
+	size = 0;
+    };
+
+    ~gsl_inv_sqrt_workspace() {
+	if(size)
+            gsl_eigen_symmv_free(gsl_workspace);
+    };
+
+    void resize(int _size) {
+	if(size == _size)
+	    return;
+	    
+	if(size > 0)
+            gsl_eigen_symmv_free(gsl_workspace);
+	    
+	size = _size;
+	D.resize(size);
+	U.resize(size,size);
+	
+        gsl_workspace = gsl_eigen_symmv_alloc(size);
+
+        gsl_res.size1 = size;
+        gsl_res.size2 = size;
+        gsl_res.tda = size;
+        gsl_res.block = 0;
+        gsl_res.owner = 0;
+
+        gsl_D.size = size;
+        gsl_D.stride = 1;
+        gsl_D.data = D.rawdata();
+        gsl_D.block = 0;
+        gsl_D.owner = 0;
+
+        gsl_U.size1 = size;
+        gsl_U.size2 = size;
+        gsl_U.tda = size;
+        gsl_U.data = U.rawdata();
+        gsl_U.block = 0;
+        gsl_U.owner = 0;
+    };
 };
 
 // inv(Matrix)
@@ -77,6 +138,8 @@ inline const Matrix<double,N,N> gsl_inv_sqrt(Matrix<double,N,N,E> a) {
     assert(N > 0);
 
     static gsl_inv_sqrt_workspace<N> ws;
+    
+    ws.resize(a.cols());
 
     Matrix<double,N,N> res = a;
     ws.gsl_res.data = res.rawdata();
@@ -95,7 +158,6 @@ inline const Matrix<double,N,N> gsl_inv_sqrt(Matrix<double,N,N,E> a) {
 
     for(uint x=N;x-->0;) {
         assert(ws.D(x) > 0);
-//std::cerr << ws.D(x) << "\n";
         double sqrt_inv = 1/sqrt(ws.D(x));
         for(uint r=N;r-->0;) {
             double p1 = ws.U(r,x) * sqrt_inv;
@@ -103,7 +165,6 @@ inline const Matrix<double,N,N> gsl_inv_sqrt(Matrix<double,N,N,E> a) {
                 res(r,c) += p1 * transpose(ws.U)(x,c);
         };
     };
-//std::cerr << "\n";
 
     return res;
 };

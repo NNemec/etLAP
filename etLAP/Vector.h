@@ -25,21 +25,6 @@
 
 namespace etLAP {
 
-/*
-template <int N,typename T,class E>
-class Vector_Common<Vector<N,T,E> > {
-  public:
-    template <typename TD>
-    operator Matrix<N,1,TD,Column<Vector<N,T,E> > >() {
-        return Matrix<N,1,typename TypeCast<TD,T>::Dest_t,Column<Vector<N,T,E> > >(*this);
-    };
-    template <typename TD>
-    operator Matrix<1,N,TD,Row<Vector<N,T,E> > >() {
-        return Matrix<1,N,typename TypeCast<TD,T>::Dest_t,Row<Vector<N,T,E> > >(*this);
-    };
-};
-*/
-
 /*****************************************************************************
  *  Smart Array - Fixed size
  */

@@ -455,3 +455,63 @@ g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=pentium -DASSIGN_POL
 FIX D:   3 N: 10000000 tr:   107.5855 time:     2.0500
 VAR D:   3 N: 10000000 tr:   107.5855 time:    12.7200
 
+-- multiple small changes
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Tue Jan 28 11:10:23 CET 2003
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=pentium -DASSIGN_POLICY=AP_manual -I.
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.9400
+VAR D:   3 N: 10000000 tr:   107.5855 time:    12.7900
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Tue Jan 28 11:11:38 CET 2003
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=athlon -DASSIGN_POLICY=AP_manual -I.
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.8200
+VAR D:   3 N: 10000000 tr:   107.5855 time:    12.4800
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Tue Jan 28 11:16:10 CET 2003
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=athlon -mfpmath=sse -mmmx -msse -DASSIGN_POLICY=AP_manual -I.
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.8300
+VAR D:   3 N: 10000000 tr:   107.5855 time:    12.3900
+
+-- static const int in Costs.h
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Tue Jan 28 11:21:13 CET 2003
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=athlon -mfpmath=sse -mmmx -msse -DASSIGN_POLICY=AP_manual -I.
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.7800
+VAR D:   3 N: 10000000 tr:   107.5855 time:    12.4400
+
+-- complete static const int
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Tue Jan 28 11:28:24 CET 2003
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=athlon -mfpmath=sse -mmmx -msse -DASSIGN_POLICY=AP_manual -I.
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.0600
+VAR D:   3 N: 10000000 tr:   107.5855 time:    27.9700
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Tue Jan 28 11:30:19 CET 2003
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=athlon -mfpmath=sse -mmmx -msse -DASSIGN_POLICY=AP_manual -I.
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.6700
+VAR D:   3 N: 10000000 tr:   107.5855 time:    25.0800
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Tue Jan 28 11:35:00 CET 2003
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=athlon -mfpmath=sse -mmmx -msse -DASSIGN_POLICY=AP_manual -I.
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.8100
+VAR D:   3 N: 10000000 tr:   107.5855 time:    12.3700
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Tue Jan 28 18:32:04 CET 2003
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=athlon -mfpmath=sse -mmmx -msse -DASSIGN_POLICY=AP_manual -I. -DNDEBUG
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.8300
+VAR D:   3 N: 10000000 tr:   107.5855 time:     8.8700
+
+Linux obstler 2.4.16 #2 Tue Dec 18 19:10:09 CET 2001 i686 unknown
+Tue Jan 28 18:32:43 CET 2003
+g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=athlon -mfpmath=sse -mmmx -msse -DASSIGN_POLICY=AP_manual -I. -DNDEBUG -DFLATLOOP
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.9200
+VAR D:   3 N: 10000000 tr:   107.5855 time:     8.5800
+

@@ -21,7 +21,7 @@
 #define _ETLAP_SU_N_H_
 
 #include "Common.h"
-#include "Costs.h"
+#include "Traits.h"
 #include <complex>
 #include <cassert>
 
@@ -29,7 +29,7 @@ namespace etLAP {
 
 class TagSUNgenerator;
 
-template <> struct Costs<TagSUNgenerator> { enum { c = 0 }; };
+template <> struct Traits<TagSUNgenerator> { static const int costs = 0; };
 
 template <int N,typename REAL>
 class Matrix<std::complex<REAL>,N,N,TagSUNgenerator>
@@ -65,7 +65,6 @@ class Matrix<std::complex<REAL>,N,N,TagSUNgenerator>
                 b = a-(x/2); // b < a
             };
         };
-//std::cout << "idx: " << idx << " type: " << type << " x: " << x << " a: " << a << " b: " << b << "\n";
     };
 
     const T operator() (int r,int c) const {
