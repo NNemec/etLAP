@@ -56,11 +56,11 @@ template <typename T> struct TypeCast<T,T> {
 };
 
 #define DEFINE_NUMERIC_CAST(TO,FROM)     \
-template <> struct TypeCast<TO,FROM>     { \
-    static const bool valid = true;        \
-    typedef TypeCast<TO,FROM> Cast_t;      \
-    typedef TO Dest_t;                     \
-    static TO cast(FROM x) { return x; }   \
+template <> struct TypeCast<TO,FROM> {   \
+    static const bool valid = true;      \
+    typedef TypeCast<TO,FROM> Cast_t;    \
+    typedef TO Dest_t;                   \
+    static TO cast(FROM x) { return x; } \
 };
 
 DEFINE_NUMERIC_CAST(float,int)
@@ -105,6 +105,9 @@ template <typename T,class OpTag> struct UnaryResult { typedef T Result_t; };
 template <typename REAL> struct UnaryResult<std__complex<REAL>,OpAbs> { typedef REAL Result_t; };
 template <typename REAL> struct UnaryResult<std__complex<REAL>,OpReal> { typedef REAL Result_t; };
 template <typename REAL> struct UnaryResult<std__complex<REAL>,OpImag> { typedef REAL Result_t; };
+template <typename REAL> struct UnaryResult<std__complex<REAL>,OpSqr> { typedef REAL Result_t; };
+
+template <typename T,int N,class E> struct UnaryResult<Vector<T,N,E>,OpSqr> { typedef typename UnaryResult<T,OpSqr>::Result_t Result_t; };
 
 /*******************************************************************************
  * TypeCombine
@@ -116,7 +119,7 @@ template <typename T,class OpTag> struct TypeCombine<T,T,OpTag> { typedef T Resu
 #define DEFINE_NUMERIC_TYPE_COMBINE(RES,T1,T2) \
 template <class OpTag>                         \
 struct TypeCombine<T1,T2,OpTag> {              \
-    typedef RES Result_t;                    \
+    typedef RES Result_t;                      \
     static RES cast(T1 a) { return a; };       \
     static RES cast(T2 a) { return a; };       \
 };
@@ -179,6 +182,35 @@ struct SizeCombine<N,0> { static const int n = N; };
 template <>
 struct SizeCombine<0,0> { static const int n = 0; };
 
+/*******************************************************************************
+ * Routines for numeric types
+ */
+
+int sqr(int x) { return x*x; };
+float sqr(float x) { return x*x; };
+double sqr(double x) { return x*x; };
+long double sqr(long double x) { return x*x; };
+
+#define DEFINE_ASSIGNMENT(TD,OP,OPNAME)        \
+template <typename TS>                         \
+inline void OPNAME(TD &restrict dest,TS src) { \
+    dest OP TypeCast<TD,TS>::cast(src);        \
+};
+
+#define DEFINE_ASSIGNMENTS(TD)      \
+DEFINE_ASSIGNMENT(TD,=,assign)      \
+DEFINE_ASSIGNMENT(TD,+=,assign_add) \
+DEFINE_ASSIGNMENT(TD,-=,assign_sub) \
+DEFINE_ASSIGNMENT(TD,*=,assign_mul) \
+DEFINE_ASSIGNMENT(TD,/=,assign_div)
+
+DEFINE_ASSIGNMENTS(int)
+DEFINE_ASSIGNMENTS(float)
+DEFINE_ASSIGNMENTS(double)
+DEFINE_ASSIGNMENTS(long double)
+
+#undef DEFINE_ASSIGNMENTS
+#undef DEFINE_ASSIGNMENT
 
 }; // namespace etLAP
 

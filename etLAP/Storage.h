@@ -21,8 +21,12 @@
 #define _ETLAP_STORAGE_H_
 
 #include <memory>
+#include <cassert>
 
 namespace etLAP {
+
+template <typename T>
+void clear(T &);
 
 template <typename T /*,class Allocator = std::allocator<T>*/ >
 class Storage {
@@ -65,7 +69,7 @@ class Storage {
 
         void clear() {
             for(unsigned int n=0;n<size;n++)
-                data()[n] = (T)0;
+                etLAP::clear(data()[n]);
         };
 
     private:

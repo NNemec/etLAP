@@ -12,14 +12,14 @@ CXXFLAGS =
 CXXFLAGS += -Wall
 #CXXFLAGS += -save-temps
 CXXFLAGS += -O3
-CXXFLAGS += -finline-limit=2000
+#CXXFLAGS += -finline-limit=2000
 #CXXFLAGS += -finline-limit=5000
-CXXFLAGS += -funroll-loops
+#CXXFLAGS += -funroll-loops
 #CXXFLAGS += -march=pentium
-CXXFLAGS += -march=athlon
-CXXFLAGS += -mfpmath=sse
-CXXFLAGS += -mmmx
-CXXFLAGS += -msse
+#CXXFLAGS += -march=athlon
+#CXXFLAGS += -mfpmath=sse
+#CXXFLAGS += -mmmx
+#CXXFLAGS += -msse
 #CXXFLAGS += -g
 #CXXFLAGS += -fno-inline
 
@@ -29,7 +29,8 @@ CXXFLAGS += -DASSIGN_POLICY=AP_manual
 #CXXFLAGS += -DASSIGN_POLICY=AP_conservative
 
 #CXX = g++-3.0
-CXX = g++-3.2
+CXX = icc
+#CXX = g++-3.2
 #CXX = g++
 #CXX = mpiCC
 

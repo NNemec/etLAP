@@ -52,7 +52,7 @@ class Matrix<T,R,C,Smart>
     const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int rw_,int cl_) { assert(R == rw_ && C == cl_); };
-    void clear() { for(int n=R*C;n-->0;) data[n] = (T)0; };
+    void clear() { for(int n=R*C;n-->0;) etLAP::clear(data[n]); };
 
     const T operator() (int r,int c) const { return data[r*C+c]; };
     T &operator() (int r,int c,bool unsafe=false) { return data[r*C+c]; };
@@ -155,7 +155,7 @@ class Matrix<T,R,C,Packed>
     const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int rw_,int cl_) { assert(R == rw_ && C == cl_); };
-    void clear() { for(int n=R*C;n-->0;) data[n] = (T)0; };
+    void clear() { for(int n=R*C;n-->0;) etLAP::clear(data[n]); };
 
     const T operator() (int r,int c) const { return data[r*C+c]; };
     T &operator() (int r,int c,bool unsafe=false) { return data[r*C+c]; };
@@ -205,7 +205,7 @@ class Matrix<T,R,C,ExtPtr>
     const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int rw_,int cl_) { assert(R == rw_ && C == cl_); };
-    void clear() { for(int i=R*C;i-->0;) ptr[i] = (T)0; };
+    void clear() { for(int i=R*C;i-->0;) etLAP::clear(ptr[i]); };
 
     const T operator() (int r,int c) const { return ptr[r*C + c]; };
     T &operator() (int r,int c,bool unsafe=false) { return ptr[r*C + c]; };
@@ -243,7 +243,7 @@ class Matrix<T,0,0,ExtPtr>
     const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int rw_,int cl_) { rw = rw_; cl = cl_; };
-    void clear() { for(int i=rw*cl;i-->0;) ptr[i] = (T)0; };
+    void clear() { for(int i=rw*cl;i-->0;) etLAP::clear(ptr[i]); };
 
     const T operator() (int r,int c) const { return ptr[r*cl + c]; };
     T &operator() (int r,int c,bool unsafe=false) { return ptr[r*cl + c]; };
@@ -270,12 +270,12 @@ inline void assign(Matrix<TD,RD,CD,ED> &restrict dest,const Matrix<TS,RS,CS,ES> 
 #ifndef NO_FLATLOOP
     if(Traits<ES>::flataccess)
         for(int n=dest.rows()*dest.cols();n-->0;)
-            dest[n] = TypeCast<TD,TS>::cast(src[n]);
+            assign(dest[n],src[n]);
     else
 #endif
         for(int r=dest.rows();r-->0;)
         for(int c=dest.cols();c-->0;)
-            dest(r,c,true) = TypeCast<TD,TS>::cast(src(r,c));
+            assign(dest(r,c,true),src(r,c));
 };
 
 // Matrix += Matrix
@@ -288,12 +288,12 @@ inline void assign_add(Matrix<TD,RD,CD,ED> &restrict dest,const Matrix<TS,RS,CS,
 #ifndef NO_FLATLOOP
     if(Traits<ES>::flataccess)
         for(int n=dest.rows()*dest.cols();n-->0;)
-            dest[n] += TypeCast<TD,TS>::cast(src[n]);
+            assign_add(dest[n],src[n]);
     else
 #endif
         for(int r=dest.rows();r-->0;)
         for(int c=dest.cols();c-->0;)
-            dest(r,c,true) += TypeCast<TD,TS>::cast(src(r,c));
+            assign_add(dest(r,c,true),src(r,c));
 };
 
 // Matrix -= Matrix
@@ -306,12 +306,12 @@ inline void assign_sub(Matrix<TD,RD,CD,ED> &restrict dest,const Matrix<TS,RS,CS,
 #ifndef NO_FLATLOOP
     if(Traits<ES>::flataccess)
         for(int n=dest.rows()*dest.cols();n-->0;)
-            dest[n] -= TypeCast<TD,TS>::cast(src[n]);
+            assign_sub(dest[n],src[n]);
     else
 #endif
         for(int r=dest.rows();r-->0;)
         for(int c=dest.cols();c-->0;)
-            dest(r,c,true) -= TypeCast<TD,TS>::cast(src(r,c));
+            assign_sub(dest(r,c,true),src(r,c));
 };
 
 // Matrix = Scalar
@@ -321,7 +321,7 @@ inline void assign(Matrix<TD,N,N,ED> &restrict dest,const TS &restrict s,TypeCas
     assert(dest.rows() == dest.cols());
     dest.clear();
     for(int n=dest.rows();n-->0;)
-        dest(n,n,true) = TypeCast<TD,TS>::cast(s);
+        assign(dest(n,n,true),s);
 };
 
 // Matrix *= Scalar
@@ -331,11 +331,11 @@ inline void assign_mul(Matrix<TD,R,C,E> &restrict dest,TS s) {
     dest.prepare_write_clone();
 #ifndef NO_FLATLOOP
     for(int n=dest.rows()*dest.cols();n-->0;)
-        dest[n] *= TypeCast<TD,TS>::cast(s);
+        assign_mul(dest[n],s);
 #else
     for(int r=dest.rows();r-->0;)
     for(int c=dest.cols();c-->0;)
-        dest(r,c,true) *= TypeCast<TD,TS>::cast(s);
+        assign_mul(dest(r,c,true),s);
 #endif
 };
 
@@ -346,11 +346,11 @@ inline void assign_div(Matrix<TD,R,C,E> &restrict dest,TS s) {
     dest.prepare_write_clone();
 #ifndef NO_FLATLOOP
     for(int n=dest.rows()*dest.cols()-1;n>=0;n--)
-        dest[n] /= TypeCast<TD,TS>::cast(s);
+        assign_div(dest[n],s);
 #else
     for(int r=dest.rows();r-->0;)
     for(int c=dest.cols();c-->0;)
-        dest(r,c,true) /= TypeCast<TD,TS>::cast(s);
+        assign_div(dest(r,c,true),s);
 #endif
 };
 
@@ -362,7 +362,7 @@ inline void assign(Matrix<TD,ND,ND,ED> &restrict dest,const Vector<TS,NS,ES> &re
     dest.resize(src.size(),src.size());
     dest.clear();
     for(int n=src.size();n-->0;)
-        dest(n,n,true) = TypeCast<TD,TS>::cast(src(n));
+        assign(dest(n,n,true),src(n));
 };
 
 // Matrix<N,1> = Vector<N>
@@ -373,9 +373,9 @@ inline void assign(Matrix<TD,RD,1,ED> &restrict dest,const Vector<TS,RS,ES> &res
     assert(dest.rows() == src.size());
     for(int r=dest.rows();r-->0;)
 #ifndef NO_FLATLOOP
-        dest[r] = TypeCast<TD,TS>::cast(src(r));
+        assign(dest[r],src(r));
 #else
-        dest(r,0,true) = TypeCast<TD,TS>::cast(src(r));
+        assign(dest(r,0,true),src(r));
 #endif
 };
 
@@ -387,9 +387,9 @@ inline void assign(Matrix<TD,1,CD,ED> &restrict dest,const Vector<TS,CS,ES> &res
     assert(dest.cols() == src.size());
     for(int c=dest.cols();c-->0;)
 #ifndef NO_FLATLOOP
-        dest[c] = TypeCast<TD,TS>::cast(src(c));
+        assign(dest[c],src(c));
 #else
-        dest(0,c,true) = TypeCast<TD,TS>::cast(src(c));
+        assign(dest(0,c,true),src(c));
 #endif
 };
 
@@ -461,6 +461,8 @@ class Matrix<T,N,N,Scalar>
     template<typename X>
     const SAME &operator=(const X &restrict src) { assign_from(src); return *(SAME *)this; };
 
+    void clear() { etLAP::clear(s); };
+
     const T operator() (int r,int c) const { return r==c?s:(T)0; }
     T &operator() () { return s; }
     const T operator[] (int n) const { assert(false); throw 0; };
@@ -491,6 +493,9 @@ class Matrix<T,0,0,Scalar>
     const T operator() (int r,int c) const { return r==c?s:(T)0; }
     T &operator() () { return s; }
     const T operator[] (int n) const { assert(false); throw 0; };
+    
+    void clear() { etLAP::clear(s); };
+    
     int rows() const { return sz; }
     int cols() const { return sz; }
 };

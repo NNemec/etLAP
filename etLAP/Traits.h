@@ -90,7 +90,7 @@ template <> struct Traits<OpRevMul> { static const int costs = 1; };
 namespace etLAP {
 
 template <typename T,int N,class E>
-struct Traits<Vector<T,N,E> > { static const int costs = Traits<E>::costs; };
+struct Traits<Vector<T,N,E> > { static const int costs = Traits<E>::costs; static const bool flataccess = false; };
 template <int R,int C,typename T,class E>
 struct Traits<Matrix<T,R,C,E> > { static const int costs = Traits<E>::costs; static const bool flataccess = Traits<E>::flataccess; };
 

@@ -88,6 +88,15 @@ DefineMatrixElemUnOp(abs,OpAbs)
 DefineMatrixElemUnOp(real,OpReal)
 DefineMatrixElemUnOp(imag,OpImag)
 
+// sqr(Vector)
+template <typename T,int N,class E>
+inline const typename UnaryResult<T,OpSqr>::Result_t sqr(const Vector<T,N,E> &a) {
+    typename UnaryResult<T,OpSqr>::Result_t res = 0;
+    for (int n = a.size(); n-- > 0;) {
+        res += sqr(a(n));
+    };
+    return res;
+};
 
 // transpose(Matrix)
 template <int R,int C,typename T,class E>
@@ -233,42 +242,42 @@ inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
 };
 
 // buf(Vector)
-template <int N,typename T,class E>
+template <typename T,int N,class E>
 inline const Vector<T,N,Buffer>
 buf(const Vector<T,N,E> &v) {
     return Vector<T,N,Buffer>(v);
 };
 
 // buf(Vector<Buffer>)
-template <int N,typename T>
+template <typename T,int N>
 inline const Vector<T,N,Buffer>
 buf(const Vector<T,N,Buffer> &v) {
     return v;
 };
 
 // buf(Matrix)
-template <int R,int C,typename T,class E>
+template <typename T,int R,int C,class E>
 inline const Matrix<T,R,C,Buffer>
 buf(const Matrix<T,R,C,E> &m) {
     return Matrix<T,R,C,Buffer>(m);
 };
 
 // buf(Matrix<Buffer>)
-template <int R,int C,typename T,class E>
+template <typename T,int R,int C,class E>
 inline const Matrix<T,R,C,Buffer>
 buf(const Matrix<T,R,C,Buffer> &m) {
     return m;
 };
 
 // nobuf(Vector)
-template <int N,typename T,class E>
+template <typename T,int N,class E>
 inline const Vector<T,N,NoBuffer<Vector<T,N,E> > >
 nobuf(const Vector<T,N,E> &m) {
     return Vector<T,N,NoBuffer<Vector<T,N,E> > >(m);
 };
 
 // nobuf(Matrix)
-template <int R,int C,typename T,class E>
+template <typename T,int R,int C,class E>
 inline const Matrix<T,R,C,NoBuffer<Matrix<T,R,C,E> > >
 nobuf(const Matrix<T,R,C,E> &m) {
     return Matrix<T,R,C,NoBuffer<Matrix<T,R,C,E> > >(m);
@@ -626,6 +635,47 @@ DefineBinOp(OpIsNeq,operator!=);
  * Assignment operators
  */
 
+// Vector += Vector
+template <typename T1,int N1,class E1,typename T2,int N2,class E2>
+inline const Vector<T1,N1,E1> &
+operator+=(Vector<T1,N1,E1> &v1,const Vector<T2,N2,E2> &v2) {
+    assign_add(v1,v2);
+    return v1;
+};
+
+// Vector -= Vector
+template <typename T1,int N1,class E1,typename T2,int N2,class E2>
+inline const Vector<T1,N1,E1> &
+operator-=(Vector<T1,N1,E1> &v1,const Vector<T2,N2,E2> &v2) {
+    assign_sub(v1,v2);
+    return v1;
+};
+
+// Vector *= Scalar
+template <typename T1,int N1,class E1,typename T2>
+inline const Vector<T1,N1,E1> &
+operator*=(Vector<T1,N1,E1> &v,const T2 &s) {
+    assign_mul(v,s);
+    return v;
+};
+
+// Vector /= Scalar
+template <typename T1,int N1,class E1,typename T2>
+inline const Vector<T1,N1,E1> &
+operator/=(Vector<T1,N1,E1> &v,const T2 &s) {
+    assign_div(v,s);
+    return v;
+};
+
+// Vector *= Matrix
+template <typename T1,int N1,class E1,typename T2,int N2,class E2>
+inline const Vector<T1,N1,E1> &
+operator*=(Vector<T1,N1,E1> &v,const Matrix<T2,N2,N2,E2> &m) {
+    CTAssert(N1==0 || N2==0 || N1 == N2);
+    assert(m.cols() == m.rows() && v.size() == m.rows());
+    return v = buf(v * m);
+};
+
 // Matrix += Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
 inline const Matrix<T1,R1,C1,E1> &
@@ -665,6 +715,25 @@ operator*=(Matrix<T1,R1,C1,E1> &m1,const Matrix<T2,N2,N2,E2> &m2) {
     CTAssert(C1==0 || N2==0 || C1 == N2);
     assert(m2.cols() == m2.rows() && m1.cols() == m2.rows());
     return m1 = buf(m1 * m2);
+};
+
+/******************************************************************************
+ * Special "clear" operator
+ */
+
+template <typename T>
+void clear(T &t) {
+    t = (T)0;
+};
+
+template <typename T,int N,class E>
+void clear(Vector<T,N,E> &v) {
+    v.clear();
+};
+
+template <typename T,int R,int C,class E>
+void clear(Matrix <T,R,C,E> &m) {
+    m.clear();
 };
 
 }; // namespace etLAP

@@ -50,8 +50,8 @@ class Vector<T,N,Smart>
     const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int sz_) { assert(sz_ == N); };
-    void clear() { for(int n=N;n-->0;) data[n] = (T)0; };
-
+    void clear() { for(int n=N;n-->0;) etLAP::clear(data[n]); };
+    
     const T operator() (int n) const { return data[n]; };
     T &operator() (int n,bool unsafe=false) { return data[n]; };
 
@@ -132,7 +132,7 @@ class Vector<T,N,Packed>
     const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
 
     void resize(int sz_) { assert(sz_ == N); };
-    void clear() { for(int n=N;n-->0;) data[n] = (T)0; };
+    void clear() { for(int n=N;n-->0;) etLAP::clear(data[n]); };
 
     const T operator() (int n) const { return data[n]; };
     T &operator() (int n,bool unsafe=false) { return data[n]; };
@@ -165,7 +165,7 @@ inline void assign(Vector<TD,ND,ED> &dest,const Vector<TS,NS,ES> &src,CAST_TAG) 
     dest.resize(src.size());
     dest.prepare_write_noclone();
     for(int i=dest.size();i-->0;)
-        dest(i,true) = TypeCast<TD,TS>::cast(src(i));
+        assign(dest(i,true),src(i));
 };
 
 // Vector = Tupel
@@ -176,7 +176,47 @@ inline void assign(Vector<TD,ND,E> &dest,const Tupel<TS,NS> &src,CAST_TAG) {
     dest.resize(NS);
     dest.prepare_write_noclone();
     for(int i=dest.size();i-->0;)
-        dest(i,true) = TypeCast<TD,TS>::cast(src[i]);
+        assign(dest(i,true),src[i]);
+};
+
+// Vector += Vector
+
+template <typename TD,int ND,class ED,typename TS,int NS,class ES>
+inline void assign_add(Vector<TD,ND,ED> &restrict dest,const Vector<TS,NS,ES> &restrict src) {
+    CTAssert(ND == NS || ND == 0);
+    assert(dest.size() == src.size());
+    dest.prepare_write_clone();
+    for(int i=dest.size();i-->0;)
+        assign_add(dest(i,true),src(i));
+};
+
+// Vector -= Vector
+
+template <typename TD,int ND,class ED,typename TS,int NS,class ES>
+inline void assign_sub(Vector<TD,ND,ED> &restrict dest,const Vector<TS,NS,ES> &restrict src) {
+    CTAssert(ND == NS || ND == 0);
+    assert(dest.size() == src.size());
+    dest.prepare_write_clone();
+    for(int i=dest.size();i-->0;)
+        assign_sub(dest(i,true),src(i));
+};
+
+// Vector *= Scalar
+
+template <typename TD,int N,class E,typename TS>
+inline void assign_mul(Vector<TD,N,E> &restrict dest,TS s) {
+    dest.prepare_write_clone();
+    for(int i=dest.size();i-->0;)
+        assign_mul(dest(i,true),s);
+};
+
+// Vector /= Scalar
+
+template <typename TD,int N,class E,typename TS>
+inline void assign_div(Vector<TD,N,E> &restrict dest,TS s) {
+    dest.prepare_write_clone();
+    for(int i=dest.size();i-->0;)
+        assign_div(dest(i,true),s);
 };
 
 /*****************************************************************************
@@ -198,7 +238,7 @@ class Vector<T,N,Zero>
 
 template <typename T>
 class Vector<T,0,Zero>
-: public Common<Vector<T,N,Zero> > {
+: public Common<Vector<T,0,Zero> > {
     typedef Vector<T,0,Zero> SAME;
 
     int sz;
