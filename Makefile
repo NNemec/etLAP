@@ -38,7 +38,7 @@ sun_gen: sun_gen.cpp etLAP/*.h Makefile
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) sun_gen.cpp -o sun_gen
 
 try_octave: try_octave.cpp etLAP/*.h Makefile
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) try_octave.cpp -L/usr/lib/octave-2.1.35 -loctave -lcruft -lblas -llapack -ldl -lreadline -lfftw -lkpathsea -lf2c -o try_octave
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) try_octave.cpp -L/usr/lib/octave-2.1.35 -loctave -lcruft -lblas -llapack -ldl -lreadline -lfftw -lkpathsea -lg2c -o try_octave
 
 try_gsl: try_gsl.cpp etLAP/*.h Makefile
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) try_gsl.cpp -lgsl -lcblas -latlas -o try_gsl

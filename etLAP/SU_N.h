@@ -25,6 +25,10 @@
 #include <complex>
 #include <cassert>
 
+#ifdef USE_OCTAVE
+#include "octave.h"
+#endif
+
 namespace etLAP {
 
 class TagSUNgenerator;
@@ -107,6 +111,15 @@ template <int N,typename REAL>
 inline Matrix<std::complex<REAL>,N,N,TagSUNgenerator> SUNgenerator(int idx) {
     return Matrix<std::complex<REAL>,N,N,TagSUNgenerator>(idx);
 };
+
+template <typename REAL>
+inline Matrix<std::complex<REAL>,2,2,
+              ScalarOp<Matrix<std::complex<REAL>,2,2,TagSUNgenerator>,
+                       REAL,
+                       OpMul> > pauli_sigma(int idx) {
+    return SUNgenerator<2,REAL>(idx)*2.0;
+};
+
 
 
 template <int N,typename REAL>
@@ -230,7 +243,11 @@ inline Matrix<std::complex<REAL>,N,N> SUN_from_suN(const Vector<REAL,N==1?1:(N*N
         Matrix<COMPLEX,N,N> suN_M = 0;
         for(uint a=1;a<NCOL*NCOL;a++)
             suN_M += COMPLEX(0,suN_V(a-1)) * SUNgenerator<NCOL,REAL>(a);
+#ifdef USE_OCTAVE
+        return octave_exp(suN_M);
+#else
         return exp(suN_M);
+#endif
     };
 };
 

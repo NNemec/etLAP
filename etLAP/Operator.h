@@ -217,15 +217,19 @@ inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
             if(res1 == res2)
                 return res1;
         };
-        std::cerr << "exp(Matrix) failed!!\n";
+        std::cerr << "exp(Matrix) failed:\n"
+                     "a=" << a << "\n"
+                     "res1=" << res1 << "\n"
+                     "res2=" << res2 << "\n";
 /*
         std::cerr << a;
         std::cerr << res1;
         std::cerr << res2;
         std::cerr << tmp1;
         std::cerr << tmp2;
-*/        
-        throw 0;
+*/
+        abort();
+        throw "exp(Matrix) failed!!";
     };
 };
 

@@ -40,6 +40,9 @@ class Octave;
  *  Octave - fixed size
  */
 
+template <> struct Traits<Octave> { static const int costs = 0; static const bool flataccess = false; };
+
+
 template <int R,int C>
 class Matrix<std__complex<double>,R,C,Octave>
 : public Common_Smart<Matrix<std__complex<double>,R,C,Octave>,std__complex<double> > {
@@ -68,7 +71,7 @@ class Matrix<std__complex<double>,R,C,Octave>
 
 //    const T operator[] (int n) const { return mat.elem(n); };
 //    T &operator[] (int n) { return mat.elem(n); };
-    const T operator[] (int n) const { Array<T> *m = &mat; return m->elem(n); };
+    const T operator[] (int n) const { const Array<T> *m = &mat; return m->elem(n); };
     T &operator[] (int n) { Array<T> *m = &mat; return m->elem(n); };
 //    T &operator[] (int n) { return mat.data()[n]; };
 //    T operator[] (int n) const { return mat.data()[n]; };

@@ -20,6 +20,8 @@
 #ifndef _ETLAP_UTIL_H_
 #define _ETLAP_UTIL_H_
 
+#include <cstdlib>
+
 namespace etLAP {
 
 template <bool COND,typename IF_TRUE,typename IF_FALSE>

@@ -105,6 +105,7 @@ struct TypeCast<std__complex<T>,std__complex<T> > {
  */
 
 int sqr(int x) { return x*x; };
+uint sqr(uint x) { return x*x; };
 float sqr(float x) { return x*x; };
 double sqr(double x) { return x*x; };
 long double sqr(long double x) { return x*x; };
