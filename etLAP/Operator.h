@@ -33,6 +33,12 @@ template <typename T> inline T apply(OpIdent *,T a) { return a; }
 template <typename T> inline T apply(OpNeg *,T a) { return -a; }
 template <typename T> inline T apply(OpConj *,T a) { return conj(a); }
 template <typename T> inline T apply(OpExp *,T a) { return exp(a); }
+template <typename T> inline T apply(OpAbs *,std__complex<T> a) { return abs(a); }
+template <typename T> inline T apply(OpReal *,std__complex<T> a) { return real(a); }
+template <typename T> inline T apply(OpImag *,std__complex<T> a) { return imag(a); }
+template <typename T> inline T apply(OpAbs *,T a) { return abs(a); }
+template <typename T> inline T apply(OpReal *,T a) { return a; }
+template <typename T> inline T apply(OpImag *,T a) { return 0.0; }
 
 template <typename T1,typename T2>
 inline typename TypeCombine<T1,T2,OpAdd>::Result_t apply(OpAdd *,T1 a,T2 b) { return TypeCombine<T1,T2,OpAdd>::cast(a) + TypeCombine<T1,T2,OpAdd>::cast(b); }
@@ -56,33 +62,32 @@ namespace etLAP {
  * Unary operators
  */
 
-// - Vector
-template <int N,typename T,class E>
-inline const Vector<T,N,ElemUnOp<Vector<T,N,E>,OpNeg> >
-operator-(const Vector<T,N,E> &m) {
-    return Vector<T,N,ElemUnOp<Vector<T,N,E>,OpNeg> >(m);
-};
+#define DefineVectorElemUnOp(OPNAME,OPTAG)                                                      \
+template <typename T,int N,class E>                                                             \
+inline const Vector<typename UnaryResult<T,OPTAG>::Result_t,N,ElemUnOp<Vector<T,N,E>,OPTAG> >   \
+OPNAME(const Vector<T,N,E> &m) {                                                                \
+    return Vector<typename UnaryResult<T,OPTAG>::Result_t,N,ElemUnOp<Vector<T,N,E>,OPTAG> >(m); \
+}
 
-// conj(Vector)
-template <int N,typename T,class E>
-inline const Vector<T,N,ElemUnOp<Vector<T,N,E>,OpConj> >
-conj(const Vector<T,N,E> &m) {
-    return Vector<T,N,ElemUnOp<Vector<T,N,E>,OpConj> >(m);
-};
+DefineVectorElemUnOp(operator-,OpNeg)
+DefineVectorElemUnOp(conj,OpConj)
+DefineVectorElemUnOp(abs,OpAbs)
+DefineVectorElemUnOp(real,OpReal)
+DefineVectorElemUnOp(imag,OpImag)
 
-// - Matrix
-template <int R,int C,typename T,class E>
-inline const Matrix<T,R,C,ElemUnOp<Matrix<T,R,C,E>,OpNeg> >
-operator-(const Matrix<T,R,C,E> &m) {
-    return Matrix<T,R,C,ElemUnOp<Matrix<T,R,C,E>,OpNeg> >(m);
-};
+#define DefineMatrixElemUnOp(OPNAME,OPTAG)                                                      \
+template <typename T,int R,int C,class E>                                                             \
+inline const Matrix<typename UnaryResult<T,OPTAG>::Result_t,R,C,ElemUnOp<Matrix<T,R,C,E>,OPTAG> >   \
+OPNAME(const Matrix<T,R,C,E> &m) {                                                                \
+    return Matrix<typename UnaryResult<T,OPTAG>::Result_t,R,C,ElemUnOp<Matrix<T,R,C,E>,OPTAG> >(m); \
+}
 
-// conj(Matrix)
-template <int R,int C,typename T,class E>
-inline const Matrix<T,R,C,ElemUnOp<Matrix<T,R,C,E>,OpConj> >
-conj(const Matrix<T,R,C,E> &m) {
-    return Matrix<T,R,C,ElemUnOp<Matrix<T,R,C,E>,OpConj> >(m);
-};
+DefineMatrixElemUnOp(operator-,OpNeg)
+DefineMatrixElemUnOp(conj,OpConj)
+DefineMatrixElemUnOp(abs,OpAbs)
+DefineMatrixElemUnOp(real,OpReal)
+DefineMatrixElemUnOp(imag,OpImag)
+
 
 // transpose(Matrix)
 template <int R,int C,typename T,class E>
@@ -200,7 +205,6 @@ inline const Matrix<T,R,C,NoBuffer<Matrix<T,R,C,E> > >
 nobuf(const Matrix<T,R,C,E> &m) {
     return Matrix<T,R,C,NoBuffer<Matrix<T,R,C,E> > >(m);
 };
-
 
 /******************************************************************************
  * Binary operator structures
@@ -450,6 +454,30 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Vector<T2,N2,E2>,OpMul> {
     typedef Vector<T,R1,E> Result_t;
     static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.cols() == x2.size()); return Result_t(x1,x2); };
 };
+
+// commute(Matrix,Matrix)
+template <int N,typename T1,class E1,typename T2,class E2>
+inline const Matrix<typename TypeCombine<T1,T2,OpMul>::Result_t,N,N> commute(const Matrix<T1,N,N,E1> &m1,const Matrix<T2,N,N,E2> &m2) {
+    typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
+    if(Costs<E1>::c > 0)
+        if(Costs<E2>::c > 0) {
+            Matrix<T,N,N> tmp1 = m1;
+            Matrix<T,N,N> tmp2 = m2;
+            return tmp1*tmp2-tmp2*tmp1;
+        } else {
+            Matrix<T,N,N> tmp1 = m1;
+            return tmp1*m2-m2*tmp1;
+        }
+    else
+        if(Costs<E2>::c > 0) {
+            Matrix<T,N,N> tmp1 = m1;
+            return tmp1*m2-m2*tmp1;
+        } else {
+            return m1*m2-m2*m1;
+        }
+};
+
+
 
 /*******************************************************************************
  * Binary operator routines

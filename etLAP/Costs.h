@@ -63,6 +63,9 @@ struct Costs<NoBuffer<A> > { enum { c = 0 }; };
 template <> struct Costs<OpIdent> { enum { c = 0 }; };
 template <> struct Costs<OpNeg> { enum { c = 1 }; };
 template <> struct Costs<OpConj> { enum { c = 1 }; };
+template <> struct Costs<OpAbs> { enum { c = 1 }; };
+template <> struct Costs<OpReal> { enum { c = 0 }; };
+template <> struct Costs<OpImag> { enum { c = 0 }; };
 
 template <> struct Costs<OpAdd> { enum { c = 1 }; };
 template <> struct Costs<OpSub> { enum { c = 1 }; };

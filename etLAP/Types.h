@@ -126,6 +126,8 @@ struct TypeCast<std__complex<T>,std__complex<T> > {
 template <typename T,class OpTag> struct UnaryResult { typedef T Result_t; };
 
 template <typename REAL> struct UnaryResult<std__complex<REAL>,OpAbs> { typedef REAL Result_t; };
+template <typename REAL> struct UnaryResult<std__complex<REAL>,OpReal> { typedef REAL Result_t; };
+template <typename REAL> struct UnaryResult<std__complex<REAL>,OpImag> { typedef REAL Result_t; };
 
 /*******************************************************************************
  * TypeCombine

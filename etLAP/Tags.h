@@ -69,6 +69,8 @@ class OpIdent;
 class OpNeg;
 class OpConj;
 class OpAbs;
+class OpReal;
+class OpImag;
 class OpExp;
 class OpTranspose;
 class OpAdj;

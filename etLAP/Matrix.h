@@ -566,10 +566,10 @@ class Matrix<T,0,0,One>
  *  Expressions
  */
 
-template <int R,int C,typename T,class E1,class Op>
-class Matrix<T,R,C,ElemUnOp<Matrix<T,R,C,E1>,Op> >
-: public Common<Matrix<T,R,C,ElemUnOp<Matrix<T,R,C,E1>,Op> > > {
-    typedef Matrix<T,R,C,E1> M;
+template <int R,int C,typename T,typename T1,class E1,class Op>
+class Matrix<T,R,C,ElemUnOp<Matrix<T1,R,C,E1>,Op> >
+: public Common<Matrix<T,R,C,ElemUnOp<Matrix<T1,R,C,E1>,Op> > > {
+    typedef Matrix<T1,R,C,E1> M;
     typedef ElemUnOp<M,Op> E;
     typedef Matrix<T,R,C,E> SAME;
 

@@ -217,10 +217,10 @@ class Vector<T,0,Zero>
  *  Expressions
  */
 
-template <int N,typename T,class E1,class Op>
-class Vector<T,N,ElemUnOp<Vector<T,N,E1>,Op> >
-: public Common<Vector<T,N,ElemUnOp<Vector<T,N,E1>,Op> > > {
-    typedef Vector<T,N,E1> V;
+template <int N,typename T,typename T1,class E1,class Op>
+class Vector<T,N,ElemUnOp<Vector<T1,N,E1>,Op> >
+: public Common<Vector<T,N,ElemUnOp<Vector<T1,N,E1>,Op> > > {
+    typedef Vector<T1,N,E1> V;
     typedef ElemUnOp<V,Op> E;
     typedef Vector<T,N,E> SAME;
 
