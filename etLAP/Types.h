@@ -203,13 +203,6 @@ struct BinaryOp<OpTag,TYPE,TYPE> {                                              
     static Result_t apply(TYPE a,TYPE b) { return _RawBinOp<OpTag,TYPE,TYPE,TYPE>::apply(a,b); } \
 };
 
-DEFINE_IDTYPE_BINARYOP(int)
-DEFINE_IDTYPE_BINARYOP(float)
-DEFINE_IDTYPE_BINARYOP(double)
-DEFINE_IDTYPE_BINARYOP(long double)
-#undef DEFINE_IDTYPE_BINARYOP
-
-
 #define DEFINE_BINARYOP(RES,T1,T2)                                                              \
 template <typename OpTag>                                                                       \
 struct BinaryOp<OpTag,T1,T2> {                                                                  \
@@ -217,9 +210,23 @@ struct BinaryOp<OpTag,T1,T2> {                                                  
     static Result_t apply(T1 a,T2 b) { return BinaryOp<OpTag,RES,RES>::apply((RES)a,(RES)b); }  \
 };
 
-#define DEFINE_BINARYOPS(HIGH,LOW)      \
-DEFINE_BINARYOP(HIGH,HIGH,LOW)   \
-DEFINE_BINARYOP(HIGH,LOW,HIGH)
+#define DEFINE_IDTYPE_BINARYOPS(TYPE)                       \
+DEFINE_IDTYPE_BINARYOP(TYPE)                                \
+DEFINE_BINARYOP(std__complex<TYPE>,std__complex<TYPE>,TYPE) \
+DEFINE_BINARYOP(std__complex<TYPE>,TYPE,std__complex<TYPE>)
+
+#define DEFINE_BINARYOPS(HIGH,LOW)                          \
+DEFINE_BINARYOP(HIGH,HIGH,LOW)                              \
+DEFINE_BINARYOP(HIGH,LOW,HIGH)                              \
+DEFINE_BINARYOP(std__complex<HIGH>,std__complex<HIGH>,LOW)  \
+DEFINE_BINARYOP(std__complex<HIGH>,std__complex<LOW>,HIGH)  \
+DEFINE_BINARYOP(std__complex<HIGH>,HIGH,std__complex<LOW>)  \
+DEFINE_BINARYOP(std__complex<HIGH>,LOW,std__complex<HIGH>)
+
+DEFINE_IDTYPE_BINARYOPS(int)
+DEFINE_IDTYPE_BINARYOPS(float)
+DEFINE_IDTYPE_BINARYOPS(double)
+DEFINE_IDTYPE_BINARYOPS(long double)
 
 DEFINE_BINARYOPS(float,int)
 DEFINE_BINARYOPS(double,int)
@@ -229,8 +236,11 @@ DEFINE_BINARYOPS(long double,float)
 DEFINE_BINARYOPS(long double,double)
 
 #undef DEFINE_BINARYOPS
+#undef DEFINE_IDTYPE_BINARYOPS
 #undef DEFINE_BINARYOP
+#undef DEFINE_IDTYPE_BINARYOP
 
+/*
 template <class OpTag,typename T1,typename T2>
 struct BinaryOp<OpTag,std__complex<T1>,T2> {
     typedef typename BinaryOp<OpTag,T1,T2>::Result_t Real_t;
@@ -247,6 +257,7 @@ struct BinaryOp<OpTag,T1,std__complex<T2> > {
     static Result_t cast2(std__complex<T2> a){return TypeCast<Result_t,std__complex<T2> >::cast(a);};
     static Result_t apply(T1 a,std__complex<T2> b) { return _RawBinOp<OpTag,Result_t,Real_t,Result_t>::apply(cast1(a),cast2(b)); };
 };
+*/
 template <class OpTag,typename T1,typename T2>
 struct BinaryOp<OpTag,std__complex<T1>,std__complex<T2> > {
     typedef std__complex<typename BinaryOp<OpTag,T1,T2>::Result_t> Result_t;

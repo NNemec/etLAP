@@ -17,31 +17,47 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <etLAP/SU_N.h>
-#include <etLAP/Operator.h>
+#include <etLAP/Matrix.h>
+#include <etLAP/octave.h>
 #include <etLAP/Output.h>
+#include <etLAP/SU_N.h>
 
-#define Pi 3.1415926535897932384626433832795029
+#include <iostream>
+#include <string>
+#include <complex>
+#include <typeinfo>
 
 using namespace etLAP;
+using namespace std;
 
-typedef double REAL;
-typedef std::complex<REAL> COMPLEX;
+const int NDIM = 5;
 
-const int NCOL = 2;
+int main(int argc,char **argv) {
+    complex<double> I = complex<double>(0,1);
+    double zero = argc==-17?1.0:0.0;
+    complex<double> res;
+    
+    etLAP::Matrix<complex<double>,NDIM,NDIM> B = 0.5 * SUNgenerator<NDIM,double>(2) + 0.5 * SUNgenerator<NDIM,double>(7);
+    
+    std::cerr << B << "\n";
+    std::cerr << octave_exp(-I*B) << "\n";
+    std::cerr << exp(-I*B) << "\n";
+    
+    std::cerr << "start\n";
 
-const uint MIN_A = (NCOL==1)?0:1;
-typedef Vector<REAL,NCOL*NCOL-MIN_A> suN_VECTOR;
-typedef Matrix<COMPLEX,NCOL,NCOL> SUN_MATRIX;
-
-int main() {
-    for(int i=0;i<NCOL*NCOL;i++) {
-        std::cout << SUNgenerator<NCOL,REAL>(i) << "\n";
-        std::cout << trace(SUNgenerator<NCOL,REAL>(i) * SUNgenerator<NCOL,REAL>(i)) << "\n";
+    res = zero;    
+    for(int i=1;i<10000;i++) {
+        I += zero;
+        res += octave_exp(-I*B)(0,0);
     };
     
-    suN_VECTOR v;
-    v.clear(); v(0) = 1.0;
-    for(int i=0;i<=16;i++)
-	std::cout << SUN_from_suN(2*Pi*i/16.0 * v,*((SUN_MATRIX*)0)) << "\n";
-};
+    std::cerr << "middle: " << res << "\n";
+    
+    res = zero;    
+    for(int i=1;i<10000;i++) {
+        I += zero;
+        res += exp(-I*B)(0,0);
+    };
+    
+    std::cerr << "end: " << res << "\n";
+}

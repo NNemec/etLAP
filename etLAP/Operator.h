@@ -101,6 +101,13 @@ inline T trace(const Matrix<T,N,N,E> &m) {
     return res;
 };
 
+// det(Matrix)
+template <typename T,class E>
+inline T det(const Matrix<T,2,2,E> &m) {
+    assert(m.rows() == m.cols());
+    return m(0,0)*m(1,1)-m(0,1)*m(1,0);
+};
+
 // inv(Matrix)
 template <int N,typename T,class E>
 inline const Matrix<T,N,N> inv(Matrix<T,N,N,E> a) {
@@ -186,7 +193,7 @@ inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
     if(max > 10.0) {
         // use product expansion exp(a) = lim_[n->inf] (1+a/n)^n
         int lb_n = ilogb(max)+((TypeEqual<REAL,double>::res)?26:13);
-        Matrix<T,N,N> res = 1 + a/exp2(lb_n);
+        Matrix<T,N,N> res = 1 + a/pow(2,lb_n);
         while(lb_n-- > 0)
             res = buf(res*res);
         return res;
@@ -211,11 +218,13 @@ inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
                 return res1;
         };
         std::cerr << "exp(Matrix) failed!!\n";
+/*
         std::cerr << a;
         std::cerr << res1;
         std::cerr << res2;
         std::cerr << tmp1;
         std::cerr << tmp2;
+*/        
         throw 0;
     };
 };
@@ -442,10 +451,10 @@ struct BinaryOp<OpSub,Matrix<T1,R,C,E1>,T2> {
     typedef typename BinaryOp<OpSub,T1,T2>::Result_t T;
     typedef ElemBinOp<X1,X2,OpSub> E;
     typedef Matrix<T,R,C,E> Result_t;
-    static Result_t apply(const X1 &m,const T2 &s) { return
+    static Result_t apply(const X1 &m,const T2 &s) {
         CTAssert(R == C);
         assert(m.rows() == m.cols());
-        Result_t(m,X2(m.rows(),s));
+        return Result_t(m,X2(m.rows(),s));
     };
 };
 

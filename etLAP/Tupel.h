@@ -45,6 +45,9 @@ class Tupel {
 
     const T operator[](int i) const { return t[i]; }
     T &operator[](int i) { return t[i]; }
+
+    Tupel<T,N> operator+(const Tupel<T,N> &other) const { Tupel<T,N> res; for(int i=N;i-->0;) res[i]=t[i] + other[i]; return res; }
+    Tupel<T,N> operator-(const Tupel<T,N> &other) const { Tupel<T,N> res; for(int i=N;i-->0;) res[i]=t[i] - other[i]; return res; }
 };
 
 template <typename T>

@@ -29,7 +29,7 @@ namespace etLAP {
 
 class TagSUNgenerator;
 
-template <> struct Traits<TagSUNgenerator> { static const int costs = 0; };
+template <> struct Traits<TagSUNgenerator> { static const int costs = 0; static const bool flataccess = false; };
 
 template <int N,typename REAL>
 class Matrix<std::complex<REAL>,N,N,TagSUNgenerator>
@@ -95,6 +95,7 @@ class Matrix<std::complex<REAL>,N,N,TagSUNgenerator>
             throw 0;
         };
     };
+    const T operator[] (int n) const { assert(false); throw 0; };
 
     int rows() const { return N; };
     int cols() const { return N; };
@@ -217,6 +218,20 @@ inline REAL SUNstructure(uint a,uint b,uint c) {
 template <int N,typename REAL>
 inline bool SUNstructure_nonzero(uint a,uint b,uint c) {
     return SUNstructure_val<N,REAL>().is_nonzero(a,b,c);
+};
+
+template <int N,typename REAL,class T1,class T2>
+inline Matrix<std::complex<REAL>,N,N> SUN_from_suN(const Vector<REAL,N==1?1:(N*N-1),T1> &suN_V,const Matrix<std::complex<REAL>,N,N,T2> &dummy) {
+    typedef std::complex<REAL> COMPLEX;
+    if(N == 1)
+//        return Matrix<std::complex<REAL>,N,N>(COMPLEX(cos(suN_V(0)),sin(suN_V(0))));
+        return COMPLEX(cos(suN_V(0)),sin(suN_V(0)));
+    else {
+        Matrix<COMPLEX,N,N> suN_M = 0;
+        for(uint a=1;a<NCOL*NCOL;a++)
+            suN_M += COMPLEX(0,suN_V(a-1)) * SUNgenerator<NCOL,REAL>(a);
+        return exp(suN_M);
+    };
 };
 
 }; // namespace etLAP

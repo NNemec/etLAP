@@ -213,4 +213,4 @@ inline const Matrix<double,N,N> gsl_inv_sqrt(Matrix<double,N,N,E> a) {
 
 }; // namespace etLAP
 
-#endif // _VECTOR_H_
+#endif // _GSL_H_
