@@ -22,37 +22,6 @@
 
 #include "Tags.h"
 #include "Types.h"
-
-namespace etLAP {
-
-/******************************************************************************
- * Operator declarations
- */
-
-template <typename T> inline T apply(OpIdent *,T a) { return a; }
-template <typename T> inline T apply(OpNeg *,T a) { return -a; }
-template <typename T> inline T apply(OpConj *,T a) { return conj(a); }
-template <typename T> inline T apply(OpExp *,T a) { return exp(a); }
-template <typename T> inline T apply(OpAbs *,std__complex<T> a) { return abs(a); }
-template <typename T> inline T apply(OpReal *,std__complex<T> a) { return real(a); }
-template <typename T> inline T apply(OpImag *,std__complex<T> a) { return imag(a); }
-template <typename T> inline T apply(OpAbs *,T a) { return abs(a); }
-template <typename T> inline T apply(OpReal *,T a) { return a; }
-template <typename T> inline T apply(OpImag *,T a) { return 0.0; }
-
-template <typename T1,typename T2>
-inline typename TypeCombine<T1,T2,OpAdd>::Result_t apply(OpAdd *,T1 a,T2 b) { return TypeCombine<T1,T2,OpAdd>::cast(a) + TypeCombine<T1,T2,OpAdd>::cast(b); }
-template <typename T1,typename T2>
-inline typename TypeCombine<T1,T2,OpSub>::Result_t apply(OpSub *,T1 a,T2 b) { return TypeCombine<T1,T2,OpAdd>::cast(a) - TypeCombine<T1,T2,OpAdd>::cast(b); }
-template <typename T1,typename T2>
-inline typename TypeCombine<T1,T2,OpMul>::Result_t apply(OpMul *,T1 a,T2 b) { return TypeCombine<T1,T2,OpAdd>::cast(a) * TypeCombine<T1,T2,OpAdd>::cast(b); }
-template <typename T1,typename T2>
-inline typename TypeCombine<T1,T2,OpDiv>::Result_t apply(OpDiv *,T1 a,T2 b) { return TypeCombine<T1,T2,OpAdd>::cast(a) / TypeCombine<T1,T2,OpAdd>::cast(b); }
-template <typename T1,typename T2>
-inline typename TypeCombine<T2,T1,OpMul>::Result_t apply(OpRevMul *,T1 a,T2 b) { return TypeCombine<T1,T2,OpAdd>::cast(b) * TypeCombine<T1,T2,OpAdd>::cast(a); }
-
-}; // namespace etLAP
-
 #include "Vector.h"
 #include "Matrix.h"
 
@@ -62,41 +31,51 @@ namespace etLAP {
  * Unary operators
  */
 
-#define DefineVectorElemUnOp(OPNAME,OPTAG)                                                      \
-template <typename T,int N,class E>                                                             \
-inline const Vector<typename UnaryResult<T,OPTAG>::Result_t,N,ElemUnOp<Vector<T,N,E>,OPTAG> >   \
-OPNAME(const Vector<T,N,E> &m) {                                                                \
-    return Vector<typename UnaryResult<T,OPTAG>::Result_t,N,ElemUnOp<Vector<T,N,E>,OPTAG> >(m); \
-}
+#define DefineVectorElemUnOp(OPTAG)                                                                 \
+template <typename T,int N,class E>                                                                 \
+struct UnaryOp<OPTAG,Vector<T,N,E> > {                                                              \
+    typedef Vector<typename UnaryOp<OPTAG,T>::Result_t,N,ElemUnOp<Vector<T,N,E>,OPTAG> > Result_t;  \
+    static Result_t apply(const Vector<T,N,E> &v) {                                                 \
+        return Result_t(v);                                                                         \
+    };                                                                                              \
+};
 
-DefineVectorElemUnOp(operator-,OpNeg)
-DefineVectorElemUnOp(conj,OpConj)
-DefineVectorElemUnOp(abs,OpAbs)
-DefineVectorElemUnOp(real,OpReal)
-DefineVectorElemUnOp(imag,OpImag)
+DefineVectorElemUnOp(OpIdent)
+DefineVectorElemUnOp(OpNeg)
+DefineVectorElemUnOp(OpConj)
+DefineVectorElemUnOp(OpAbs)
+DefineVectorElemUnOp(OpReal)
+DefineVectorElemUnOp(OpImag)
 
-#define DefineMatrixElemUnOp(OPNAME,OPTAG)                                                      \
-template <typename T,int R,int C,class E>                                                             \
-inline const Matrix<typename UnaryResult<T,OPTAG>::Result_t,R,C,ElemUnOp<Matrix<T,R,C,E>,OPTAG> >   \
-OPNAME(const Matrix<T,R,C,E> &m) {                                                                \
-    return Matrix<typename UnaryResult<T,OPTAG>::Result_t,R,C,ElemUnOp<Matrix<T,R,C,E>,OPTAG> >(m); \
-}
+#define DefineMatrixElemUnOp(OPTAG)                                                                     \
+template <typename T,int R,int C,class E>                                                               \
+struct UnaryOp<OPTAG,Matrix<T,R,C,E> > {                                                                \
+    typedef Matrix<typename UnaryOp<OPTAG,T>::Result_t,R,C,ElemUnOp<Matrix<T,R,C,E>,OPTAG> > Result_t;  \
+    static Result_t apply(const Matrix<T,R,C,E> &m) {                                                   \
+        return Result_t(m);                                                                             \
+    };                                                                                                  \
+};
 
-DefineMatrixElemUnOp(operator-,OpNeg)
-DefineMatrixElemUnOp(conj,OpConj)
-DefineMatrixElemUnOp(abs,OpAbs)
-DefineMatrixElemUnOp(real,OpReal)
-DefineMatrixElemUnOp(imag,OpImag)
+DefineMatrixElemUnOp(OpIdent)
+DefineMatrixElemUnOp(OpNeg)
+DefineMatrixElemUnOp(OpConj)
+DefineMatrixElemUnOp(OpAbs)
+DefineMatrixElemUnOp(OpReal)
+DefineMatrixElemUnOp(OpImag)
 
 // sqr(Vector)
 template <typename T,int N,class E>
-inline const typename UnaryResult<T,OpSqr>::Result_t sqr(const Vector<T,N,E> &a) {
-    typename UnaryResult<T,OpSqr>::Result_t res = 0;
-    for (int n = a.size(); n-- > 0;) {
-        res += sqr(a(n));
+struct UnaryOp<OpSqr,Vector<T,N,E> > {
+    typedef typename UnaryOp<OpSqr,T>::Result_t Result_t;
+    static Result_t apply(const Vector<T,N,E> &a) { 
+        Result_t res = 0;
+        for (int n = a.size(); n-- > 0;) {
+            res += sqr(a(n));
+        };
+        return res;
     };
-    return res;
 };
+
 
 // transpose(Matrix)
 template <int R,int C,typename T,class E>
@@ -162,8 +141,8 @@ inline const Matrix<T,N,N> inv(Matrix<T,N,N,E> a) {
 
 // max(Matrix)
 template <typename T,int R,int C,class E>
-inline const typename UnaryResult<T,OpAbs>::Result_t max(Matrix<T,R,C,E> a) {
-    typename UnaryResult<T,OpAbs>::Result_t res = 0;
+inline const typename UnaryOp<OpAbs,T>::Result_t max(Matrix<T,R,C,E> a) {
+    typename UnaryOp<OpAbs,T>::Result_t res = 0;
 //inline const typeof(abs(T(0)) max(Matrix<T,R,C,E> a) {
 //    typeof(abs(T(0)) res = 0;
     for (int r = a.rows(); r-- > 0;)
@@ -174,8 +153,8 @@ inline const typename UnaryResult<T,OpAbs>::Result_t max(Matrix<T,R,C,E> a) {
 
 // simplemax(Matrix)
 template <typename T,int R,int C,class E>
-inline const typename UnaryResult<T,OpAbs>::Result_t simplemax(Matrix<T,R,C,E> a) {
-    typename UnaryResult<T,OpAbs>::Result_t res = 0;
+inline const typename UnaryOp<OpAbs,T>::Result_t simplemax(Matrix<T,R,C,E> a) {
+    typename UnaryOp<OpAbs,T>::Result_t res = 0;
 //inline const typeof(abs(T(0)) max(Matrix<T,R,C,E> a) {
 //    typeof(abs(T(0)) res = 0;
     for (int r = a.rows(); r-- > 0;)
@@ -186,8 +165,8 @@ inline const typename UnaryResult<T,OpAbs>::Result_t simplemax(Matrix<T,R,C,E> a
 
 // simplemax(Matrix)
 template <typename T,int R,int C,class E>
-inline const typename UnaryResult<T,OpAbs>::Result_t simplemax(Matrix<std__complex<T>,R,C,E> a) {
-    typename UnaryResult<T,OpAbs>::Result_t res = 0;
+inline const typename UnaryOp<OpAbs,T>::Result_t simplemax(Matrix<std__complex<T>,R,C,E> a) {
+    typename UnaryOp<OpAbs,T>::Result_t res = 0;
 //inline const typeof(abs(T(0)) max(Matrix<T,R,C,E> a) {
 //    typeof(abs(T(0)) res = 0;
     for (int r = a.rows(); r-- > 0;)
@@ -202,7 +181,7 @@ template <int N,typename T,class E>
 inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
     assert(a.cols() == a.rows());
 
-    typedef typename UnaryResult<T,OpAbs>::Result_t REAL;
+    typedef typename UnaryOp<OpAbs,T>::Result_t REAL;
     REAL max = simplemax(a);
     if(max > 10.0) {
         // use product expansion exp(a) = lim_[n->inf] (1+a/n)^n
@@ -287,15 +266,12 @@ nobuf(const Matrix<T,R,C,E> &m) {
  * Binary operator structures
  */
 
-template <typename X1,typename X2,class Op>
-struct BinOp;
-
 // Vector + Vector
 template <typename T1,int N1,class E1,typename T2,int N2,class E2>
-struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpAdd> {
+struct BinaryOp<OpAdd,Vector<T1,N1,E1>,Vector<T2,N2,E2> > {
     typedef Vector<T1,N1,E1> X1;
     typedef Vector<T2,N2,E2> X2;
-    typedef typename TypeCombine<T1,T2,OpAdd>::Result_t T;
+    typedef typename BinaryOp<OpAdd,T1,T2>::Result_t T;
     static const int N = SizeCombine<N1,N2>::n;
     typedef ElemBinOp<X1,X2,OpAdd> E;
     typedef Vector<T,N,E> Result_t;
@@ -307,10 +283,10 @@ struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpAdd> {
 
 // Vector - Vector
 template <typename T1,int N1,class E1,typename T2,int N2,class E2>
-struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpSub> {
+struct BinaryOp<OpSub,Vector<T1,N1,E1>,Vector<T2,N2,E2> > {
     typedef Vector<T1,N1,E1> X1;
     typedef Vector<T2,N2,E2> X2;
-    typedef typename TypeCombine<T1,T2,OpSub>::Result_t T;
+    typedef typename BinaryOp<OpSub,T1,T2>::Result_t T;
     static const int N = SizeCombine<N1,N2>::n;
     typedef ElemBinOp<X1,X2,OpSub> E;
     typedef Vector<T,N,E> Result_t;
@@ -322,9 +298,9 @@ struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpSub> {
 
 // Vector * Scalar
 template <int N,typename T1,class E1,typename T2>
-struct BinOp<Vector<T1,N,E1>,T2,OpMul> {
+struct BinaryOp<OpMul,Vector<T1,N,E1>,T2> {
     typedef Vector<T1,N,E1> V;
-    typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
+    typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef ScalarOp<T1,T2,OpMul> E;
     typedef Vector<T,N,E> Result_t;
     static Result_t apply(const V &v,const T2 &s) { return Result_t(v,s); };
@@ -332,9 +308,9 @@ struct BinOp<Vector<T1,N,E1>,T2,OpMul> {
 
 // Vector / Scalar
 template <int N,typename T1,class E1,typename T2>
-struct BinOp<Vector<T1,N,E1>,T2,OpDiv> {
+struct BinaryOp<OpDiv,Vector<T1,N,E1>,T2> {
     typedef Vector<T1,N,E1> V;
-    typedef typename TypeCombine<T1,T2,OpDiv>::Result_t T;
+    typedef typename BinaryOp<OpDiv,T1,T2>::Result_t T;
     typedef ScalarOp<V,T2,OpDiv> E;
     typedef Vector<T,N,E> Result_t;
     static Result_t apply(const V &v,const T2 &s) { return Result_t(v,s); };
@@ -342,9 +318,9 @@ struct BinOp<Vector<T1,N,E1>,T2,OpDiv> {
 
 // Scalar * Vector
 template <typename T1,int N,typename T2,class E2>
-struct BinOp<T1,Vector<T2,N,E2>,OpMul> {
+struct BinaryOp<OpMul,T1,Vector<T2,N,E2> > {
     typedef Vector<T2,N,E2> V;
-    typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
+    typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef ScalarOp<V,T1,OpRevMul> E;
     typedef Vector<T,N,E> Result_t;
     static Result_t apply(const T1 &s,const V &v) { return Result_t(v,s); };
@@ -352,10 +328,10 @@ struct BinOp<T1,Vector<T2,N,E2>,OpMul> {
 
 // Vector * Vector
 template <typename T1,int N1,class E1,typename T2,int N2,class E2>
-struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpMul> {
+struct BinaryOp<OpMul,Vector<T1,N1,E1>,Vector<T2,N2,E2> > {
     typedef Vector<T1,N1,E1> X1;
     typedef Vector<T2,N2,E2> X2;
-    typedef typename TypeCombine<T1,T2,OpMul>::Result_t Result_t;
+    typedef typename BinaryOp<OpMul,T1,T2>::Result_t Result_t;
     static Result_t apply(const X1 &x1,const X2 &x2) {
         CTAssert(N1 == 0 || N2 == 0 || N1 == N2);
         assert(v1.size() == v2.size());
@@ -367,7 +343,7 @@ struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpMul> {
 
 // Vector == Vector
 template <typename T1,int N1,class E1,typename T2,int N2,class E2>
-struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpIsEq> {
+struct BinaryOp<OpIsEq,Vector<T1,N1,E1>,Vector<T2,N2,E2> > {
     typedef Vector<T1,N1,E1> X1;
     typedef Vector<T2,N2,E2> X2;
     typedef bool Result_t;
@@ -383,10 +359,10 @@ struct BinOp<Vector<T1,N1,E1>,Vector<T2,N2,E2>,OpIsEq> {
 
 // Matrix + Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
-struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpAdd> {
+struct BinaryOp<OpAdd,Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > {
     typedef Matrix<T1,R1,C1,E1> X1;
     typedef Matrix<T2,R2,C2,E2> X2;
-    typedef typename TypeCombine<T1,T2,OpAdd>::Result_t T;
+    typedef typename BinaryOp<OpAdd,T1,T2>::Result_t T;
     static const int R = SizeCombine<R1,R2>::n;
     static const int C = SizeCombine<C1,C2>::n;
     typedef ElemBinOp<X1,X2,OpAdd> E;
@@ -399,10 +375,10 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpAdd> {
 
 // Matrix - Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
-struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpSub> {
+struct BinaryOp<OpSub,Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > {
     typedef Matrix<T1,R1,C1,E1> X1;
     typedef Matrix<T2,R2,C2,E2> X2;
-    typedef typename TypeCombine<T1,T2,OpSub>::Result_t T;
+    typedef typename BinaryOp<OpSub,T1,T2>::Result_t T;
     static const int R = SizeCombine<R1,R2>::n;
     static const int C = SizeCombine<C1,C2>::n;
     typedef ElemBinOp<X1,X2,OpSub> E;
@@ -415,9 +391,9 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpSub> {
 
 // Matrix * Scalar
 template <typename T1,int R,int C,class E1,typename T2>
-struct BinOp<Matrix<T1,R,C,E1>,T2,OpMul> {
+struct BinaryOp<OpMul,Matrix<T1,R,C,E1>,T2> {
     typedef Matrix<T1,R,C,E1> M;
-    typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
+    typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef ScalarOp<M,T2,OpMul> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const M &m,const T2 &s) { return Result_t(m,s); };
@@ -425,9 +401,9 @@ struct BinOp<Matrix<T1,R,C,E1>,T2,OpMul> {
 
 // Matrix / Scalar
 template <typename T1,int R,int C,class E1,typename T2>
-struct BinOp<Matrix<T1,R,C,E1>,T2,OpDiv> {
+struct BinaryOp<OpDiv,Matrix<T1,R,C,E1>,T2> {
     typedef Matrix<T1,R,C,E1> M;
-    typedef typename TypeCombine<T1,T2,OpDiv>::Result_t T;
+    typedef typename BinaryOp<OpDiv,T1,T2>::Result_t T;
     typedef ScalarOp<M,T2,OpDiv> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const M &m,const T2 &s) { return Result_t(m,s); };
@@ -435,9 +411,9 @@ struct BinOp<Matrix<T1,R,C,E1>,T2,OpDiv> {
 
 // Scalar * Matrix
 template <typename T1,typename T2,int R,int C,class E2>
-struct BinOp<T1,Matrix<T2,R,C,E2>,OpMul> {
+struct BinaryOp<OpMul,T1,Matrix<T2,R,C,E2> > {
     typedef Matrix<T2,R,C,E2> M;
-    typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
+    typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef ScalarOp<M,T1,OpRevMul> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const T1 &s,const M &m) { return Result_t(m,s); };
@@ -445,10 +421,10 @@ struct BinOp<T1,Matrix<T2,R,C,E2>,OpMul> {
 
 // Matrix + Scalar
 template <typename T1,int R,int C,class E1,typename T2>
-struct BinOp<Matrix<T1,R,C,E1>,T2,OpAdd> {
+struct BinaryOp<OpAdd,Matrix<T1,R,C,E1>,T2> {
     typedef Matrix<T1,R,C,E1> X1;
     typedef Matrix<T2,R,C,Scalar> X2;
-    typedef typename TypeCombine<T1,T2,OpAdd>::Result_t T;
+    typedef typename BinaryOp<OpAdd,T1,T2>::Result_t T;
     typedef ElemBinOp<X1,X2,OpAdd> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const X1 &m,const T2 &s) {
@@ -460,10 +436,10 @@ struct BinOp<Matrix<T1,R,C,E1>,T2,OpAdd> {
 
 // Matrix - Scalar
 template <typename T1,int R,int C,class E1,typename T2>
-struct BinOp<Matrix<T1,R,C,E1>,T2,OpSub> {
+struct BinaryOp<OpSub,Matrix<T1,R,C,E1>,T2> {
     typedef Matrix<T1,R,C,E1> X1;
     typedef Matrix<T2,R,C,Scalar> X2;
-    typedef typename TypeCombine<T1,T2,OpSub>::Result_t T;
+    typedef typename BinaryOp<OpSub,T1,T2>::Result_t T;
     typedef ElemBinOp<X1,X2,OpSub> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const X1 &m,const T2 &s) { return
@@ -475,10 +451,10 @@ struct BinOp<Matrix<T1,R,C,E1>,T2,OpSub> {
 
 // Scalar + Matrix
 template <typename T1,typename T2,int R,int C,class E2>
-struct BinOp<T1,Matrix<T2,R,C,E2>,OpAdd> {
+struct BinaryOp<OpAdd,T1,Matrix<T2,R,C,E2> > {
     typedef Matrix<T1,R,C,Scalar> X1;
     typedef Matrix<T2,R,C,E2> X2;
-    typedef typename TypeCombine<T1,T2,OpAdd>::Result_t T;
+    typedef typename BinaryOp<OpAdd,T1,T2>::Result_t T;
     typedef ElemBinOp<X1,X2,OpAdd> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const T1 &s,const X2 &m) {
@@ -490,10 +466,10 @@ struct BinOp<T1,Matrix<T2,R,C,E2>,OpAdd> {
 
 // Scalar - Matrix
 template <typename T1,typename T2,int R,int C,class E2>
-struct BinOp<T1,Matrix<T2,R,C,E2>,OpSub> {
+struct BinaryOp<OpSub,T1,Matrix<T2,R,C,E2> > {
     typedef Matrix<T1,R,C,Scalar> X1;
     typedef Matrix<T2,R,C,E2> X2;
-    typedef typename TypeCombine<T1,T2,OpSub>::Result_t T;
+    typedef typename BinaryOp<OpSub,T1,T2>::Result_t T;
     typedef ElemBinOp<X1,X2,OpSub> E;
     typedef Matrix<T,R,C,E> Result_t;
     static Result_t apply(const T1 &s,const X1 &m) {
@@ -505,14 +481,14 @@ struct BinOp<T1,Matrix<T2,R,C,E2>,OpSub> {
 
 // Matrix * Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
-struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpMul> {
+struct BinaryOp<OpMul,Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > {
     static const int M=SizeCombine<C1,R2>::n;
     static const int factor = (M==0?1:M-1);
     typedef Matrix<T1,R1,C1,E1> X1;
     typedef typename IF<(factor*Traits<E1>::costs > 2),Matrix<T1,R1,C1,Buffer>,X1>::T X1_buf;
     typedef Matrix<T2,R2,C2,E2> X2;
     typedef typename IF<(factor*Traits<E2>::costs > 2),Matrix<T2,R2,C2,Buffer>,X2>::T X2_buf;
-    typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
+    typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     static const int R = C2?R1:0;
     static const int C = R1?C2:0;
     typedef Multiplied<X1_buf,X2_buf> E;
@@ -522,13 +498,13 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpMul> {
 
 // Vector * Matrix
 template <typename T1,int N1,class E1,typename T2,int R2,int C2,class E2>
-struct BinOp<Vector<T1,N1,E1>,Matrix<T2,R2,C2,E2>,OpMul> {
+struct BinaryOp<OpMul,Vector<T1,N1,E1>,Matrix<T2,R2,C2,E2> > {
     static const int factor = (N1==0?1:N1-1);
     typedef Vector<T1,N1,E1> X1;
     typedef typename IF<(factor*Traits<E1>::costs > 2),Vector<T1,N1,Buffer>,X1>::T X1_buf;
     typedef Matrix<T2,R2,C2,E2> X2;
     typedef typename IF<(factor*Traits<E2>::costs > 2),Matrix<T2,R2,C2,Buffer>,X2>::T X2_buf;
-    typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
+    typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef Multiplied<X1_buf,X2_buf> E;
     typedef Vector<T,C2,E> Result_t;
     static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.size() == x2.rows()); return Result_t(x1,x2); };
@@ -536,13 +512,13 @@ struct BinOp<Vector<T1,N1,E1>,Matrix<T2,R2,C2,E2>,OpMul> {
 
 // Matrix * Vector
 template <typename T1,int R1,int C1,class E1,typename T2,int N2,class E2>
-struct BinOp<Matrix<T1,R1,C1,E1>,Vector<T2,N2,E2>,OpMul> {
+struct BinaryOp<OpMul,Matrix<T1,R1,C1,E1>,Vector<T2,N2,E2> > {
     static const int factor = (N2==0?1:N2-1);
     typedef Matrix<T1,R1,C1,E1> X1;
     typedef typename IF<(factor*Traits<E1>::costs > 2),Matrix<T1,R1,C1,Buffer>,X1>::T X1_buf;
     typedef Vector<T2,N2,E2> X2;
     typedef typename IF<(factor*Traits<E2>::costs > 2),Vector<T2,N2,Buffer>,X2>::T X2_buf;
-    typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
+    typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef Multiplied<X1_buf,X2_buf> E;
     typedef Vector<T,R1,E> Result_t;
     static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.cols() == x2.size()); return Result_t(x1,x2); };
@@ -550,8 +526,8 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Vector<T2,N2,E2>,OpMul> {
 
 // commute(Matrix,Matrix)
 template <int N,typename T1,class E1,typename T2,class E2>
-inline const Matrix<typename TypeCombine<T1,T2,OpMul>::Result_t,N,N> commute(const Matrix<T1,N,N,E1> &m1,const Matrix<T2,N,N,E2> &m2) {
-    typedef typename TypeCombine<T1,T2,OpMul>::Result_t T;
+inline const Matrix<typename BinaryOp<OpMul,T1,T2>::Result_t,N,N> commute(const Matrix<T1,N,N,E1> &m1,const Matrix<T2,N,N,E2> &m2) {
+    typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     if(Traits<E1>::costs > 0)
         if(Traits<E2>::costs > 0) {
             Matrix<T,N,N> tmp1 = m1;
@@ -572,7 +548,7 @@ inline const Matrix<typename TypeCombine<T1,T2,OpMul>::Result_t,N,N> commute(con
 
 // Matrix == Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
-struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpIsEq> {
+struct BinaryOp<OpIsEq,Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > {
     typedef Matrix<T1,R1,C1,E1> X1;
     typedef Matrix<T2,R2,C2,E2> X2;
     typedef bool Result_t;
@@ -590,7 +566,7 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpIsEq> {
 
 
 /*******************************************************************************
- * Binary operator routines
+ * Operator routines
  */
 
 #define Xheader1 typename X1
@@ -606,30 +582,55 @@ struct BinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,OpIsEq> {
 #define Mtype1 Matrix<T1,R1,C1,E1>
 #define Mtype2 Matrix<T2,R2,C2,E2>
 
-
-#define DefineBinOpX(NAME,FNAME,ARG1,ARG2)                          \
-template <ARG1##header1,ARG2##header2>                              \
-inline const typename BinOp<ARG1##type1,ARG2##type2,NAME>::Result_t \
-FNAME(const ARG1##type1 &x1,const ARG2##type2 &x2) {                \
-    return BinOp<ARG1##type1,ARG2##type2,NAME>::apply(x1,x2);       \
+#define DefineUnOp(NAME,FNAME,ARG)                         \
+template <ARG##header1>                                     \
+inline const typename UnaryOp<NAME,ARG##type1>::Result_t    \
+FNAME(const ARG##type1 &x) {                                \
+    return UnaryOp<NAME,ARG##type1>::apply(x);             \
 }
 
-#define DefineBinOp(NAME,FNAME)    \
-DefineBinOpX(NAME,FNAME,V,X)        \
-DefineBinOpX(NAME,FNAME,X,V)        \
-DefineBinOpX(NAME,FNAME,V,V)        \
-DefineBinOpX(NAME,FNAME,M,X)        \
-DefineBinOpX(NAME,FNAME,X,M)        \
-DefineBinOpX(NAME,FNAME,M,M)        \
-DefineBinOpX(NAME,FNAME,V,M)        \
-DefineBinOpX(NAME,FNAME,M,V)
+#define DefineUnOps(NAME,FNAME) \
+DefineUnOp(NAME,FNAME,V)      \
+DefineUnOp(NAME,FNAME,M)
 
-DefineBinOp(OpAdd,operator+);
-DefineBinOp(OpSub,operator-);
-DefineBinOp(OpMul,operator*);
-DefineBinOp(OpDiv,operator/);
-DefineBinOp(OpIsEq,operator==);
-DefineBinOp(OpIsNeq,operator!=);
+DefineUnOps(OpIdent,ident)
+DefineUnOps(OpNeg,operator-)
+DefineUnOps(OpConj,conj)
+DefineUnOps(OpAbs,abs)
+DefineUnOps(OpReal,real)
+DefineUnOps(OpImag,imag)
+DefineUnOp(OpSqr,sqr,V)
+
+#undef DefineUnOps
+#undef DefineUnOp
+
+
+#define DefineBinOp(NAME,FNAME,ARG1,ARG2)                              \
+template <ARG1##header1,ARG2##header2>                                  \
+inline const typename BinaryOp<NAME,ARG1##type1,ARG2##type2>::Result_t  \
+FNAME(const ARG1##type1 &x1,const ARG2##type2 &x2) {                    \
+    return BinaryOp<NAME,ARG1##type1,ARG2##type2>::apply(x1,x2);        \
+}
+
+#define DefineBinOps(NAME,FNAME)     \
+DefineBinOp(NAME,FNAME,V,X)        \
+DefineBinOp(NAME,FNAME,X,V)        \
+DefineBinOp(NAME,FNAME,V,V)        \
+DefineBinOp(NAME,FNAME,M,X)        \
+DefineBinOp(NAME,FNAME,X,M)        \
+DefineBinOp(NAME,FNAME,M,M)        \
+DefineBinOp(NAME,FNAME,V,M)        \
+DefineBinOp(NAME,FNAME,M,V)
+
+DefineBinOps(OpAdd,operator+)
+DefineBinOps(OpSub,operator-)
+DefineBinOps(OpMul,operator*)
+DefineBinOps(OpDiv,operator/)
+DefineBinOps(OpIsEq,operator==)
+DefineBinOps(OpIsNeq,operator!=)
+
+#undef DefineBinOps
+#undef DefineBinOp
 
 /******************************************************************************
  * Assignment operators

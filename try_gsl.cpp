@@ -49,4 +49,4 @@ int main() {
     cout << A << "\n";
 //    cout << B << "\n";
 //    cout << B * A * B << "\n";
-};
+}

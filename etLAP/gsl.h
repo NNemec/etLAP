@@ -31,7 +31,7 @@
 namespace etLAP {
 
 template <int N>
-struct gsl_inv_sqrt_workspace {
+struct _gsl_eigen_symmv_workspace {
     gsl_eigen_symmv_workspace *gsl_workspace;
 
     gsl_matrix gsl_res;
@@ -42,7 +42,7 @@ struct gsl_inv_sqrt_workspace {
     Matrix<double,N,N,Packed> U;
     gsl_matrix gsl_U;
 
-    gsl_inv_sqrt_workspace() {
+    _gsl_eigen_symmv_workspace() {
         gsl_workspace = gsl_eigen_symmv_alloc(N);
 
         gsl_res.size1 = N;
@@ -65,7 +65,7 @@ struct gsl_inv_sqrt_workspace {
         gsl_U.owner = 0;
     };
 
-    ~gsl_inv_sqrt_workspace() {
+    ~_gsl_eigen_symmv_workspace() {
         gsl_eigen_symmv_free(gsl_workspace);
     };
 
@@ -75,7 +75,7 @@ struct gsl_inv_sqrt_workspace {
 };
 
 template <>
-struct gsl_inv_sqrt_workspace<0> {
+struct _gsl_eigen_symmv_workspace<0> {
     int size;
 
     gsl_eigen_symmv_workspace *gsl_workspace;
@@ -88,26 +88,26 @@ struct gsl_inv_sqrt_workspace<0> {
     Matrix<double,0,0> U;
     gsl_matrix gsl_U;
 
-    gsl_inv_sqrt_workspace() {
-	size = 0;
+    _gsl_eigen_symmv_workspace() {
+        size = 0;
     };
 
-    ~gsl_inv_sqrt_workspace() {
-	if(size)
+    ~_gsl_eigen_symmv_workspace() {
+        if(size)
             gsl_eigen_symmv_free(gsl_workspace);
     };
 
     void resize(int _size) {
-	if(size == _size)
-	    return;
-	    
-	if(size > 0)
+        if(size == _size)
+            return;
+    
+        if(size > 0)
             gsl_eigen_symmv_free(gsl_workspace);
-	    
-	size = _size;
-	D.resize(size);
-	U.resize(size,size);
-	
+
+        size = _size;
+        D.resize(size);
+        U.resize(size,size);
+
         gsl_workspace = gsl_eigen_symmv_alloc(size);
 
         gsl_res.size1 = size;
@@ -133,11 +133,51 @@ struct gsl_inv_sqrt_workspace<0> {
 
 // inv(Matrix)
 template <int N,class E>
+inline const Matrix<double,N,N> gsl_inv(Matrix<double,N,N,E> a) {
+    assert(a.cols() == a.rows());
+    assert(N > 0);
+
+    static _gsl_eigen_symmv_workspace<N> ws;
+    
+    ws.resize(a.cols());
+
+    Matrix<double,N,N> res = a;
+    ws.gsl_res.data = res.rawdata();
+
+    gsl_eigen_symmv(&ws.gsl_res,&ws.gsl_D,&ws.gsl_U,ws.gsl_workspace);
+    // res = U * diag(D) * transpose(U)
+
+    res.clear();
+
+/*
+    for(uint x=N;x-->0;)
+    for(uint r=N;r-->0;)
+    for(uint c=N;c-->0;)
+        res(r,c) += ws.U(r,x) * 1/ws.D(x) * transpose(ws.U)(x,c);
+*/
+
+    for(uint x=N;x-->0;) {
+        assert(ws.D(x) > 0);
+        double inv = 1/ws.D(x);
+        for(uint r=N;r-->0;) {
+            double p1 = ws.U(r,x) * inv;
+            for(uint c=N;c-->0;)
+                res(r,c) += p1 * transpose(ws.U)(x,c);
+        };
+    };
+
+    return res;
+};
+
+struct ENonPositiveEigenvalue {};
+
+// inv_sqrt(Matrix)
+template <int N,class E>
 inline const Matrix<double,N,N> gsl_inv_sqrt(Matrix<double,N,N,E> a) {
     assert(a.cols() == a.rows());
     assert(N > 0);
 
-    static gsl_inv_sqrt_workspace<N> ws;
+    static _gsl_eigen_symmv_workspace<N> ws;
     
     ws.resize(a.cols());
 
@@ -157,8 +197,10 @@ inline const Matrix<double,N,N> gsl_inv_sqrt(Matrix<double,N,N,E> a) {
 */
 
     for(uint x=N;x-->0;) {
-        assert(ws.D(x) > 0);
-        double sqrt_inv = 1/sqrt(ws.D(x));
+        double D = ws.D(x);
+        if(D<=0)
+            throw ENonPositiveEigenvalue();
+        double sqrt_inv = 1/sqrt(D);
         for(uint r=N;r-->0;) {
             double p1 = ws.U(r,x) * sqrt_inv;
             for(uint c=N;c-->0;)

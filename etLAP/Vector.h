@@ -267,7 +267,7 @@ class Vector<T,N,ElemUnOp<Vector<T1,N,E1>,Op> >
     typedef SAME Ref_t;
 
     Vector<T,N,E>(const V &v_) : v(v_) {}
-    T operator() (int n) const { return apply( (Op*)0,v(n) ); }
+    T operator() (int n) const { return UnaryOp<Op>::apply(v(n)); }
     int size() const { return v.size(); }
     bool is_locked() const { return v.is_locked(); };
 };
@@ -286,7 +286,7 @@ class Vector<T,N,ElemBinOp<Vector<T1,N,E1>,Vector<T2,N,E2>,Op> >
     typedef SAME Ref_t;
 
     Vector<T,N,E>(const V1 &v1_, const V2 &v2_) : v1(v1_), v2(v2_) {}
-    T operator() (int n) const { return apply( (Op*)0,v1(n),v2(n) ); }
+    T operator() (int n) const { return BinaryOp<Op>::apply(v1(n),v2(n)); }
     int size() const { return v1.size(); }
     bool is_locked() const { return v1.is_locked() || v2.is_locked(); };
 };
@@ -304,7 +304,7 @@ class Vector<T,N,ScalarOp<Vector<T1,N,E1>,T2,Op> >
     typedef SAME Ref_t;
 
     Vector<T,N,E>(const V &v_, T2 s_) : v(v_), s(s_) {}
-    T operator() (int n) const { return apply((Op*)0, v(n), s); }
+    T operator() (int n) const { return BinaryOp<Op>::apply(v(n),s); }
     int size() const { return v.size(); }
     bool is_locked() const { return v.is_locked(); };
 };

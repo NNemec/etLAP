@@ -589,8 +589,8 @@ class Matrix<T,R,C,ElemUnOp<Matrix<T1,R,C,E1>,Op> >
     typedef SAME Ref_t;
 
     Matrix<T,R,C,E>(const M &restrict m_) : m(m_) {}
-    const T operator() (int r,int c) const { return apply((Op*)0,m(r,c)); }
-    const T operator[] (int n) const { return apply((Op*)0,m[n]); }
+    const T operator() (int r,int c) const { return UnaryOp<Op>::apply(m(r,c)); }
+    const T operator[] (int n) const { return UnaryOp<Op>::apply(m[n]); }
     int rows() const { return m.rows(); };
     int cols() const { return m.cols(); };
     bool is_locked() const { return m.is_locked(); };
@@ -610,8 +610,8 @@ class Matrix<T,R,C,ElemBinOp<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2>,Op> >
     typedef SAME Ref_t;
 
     Matrix<T,R,C,E>(const M1 &restrict m1_, const M2 &restrict m2_) : m1(m1_), m2(m2_) {}
-    const T operator() (int r,int c) const { return apply((Op*)0,m1(r,c), m2(r,c)); }
-    const T operator[] (int n) const { return apply((Op*)0,m1[n], m2[n]); }
+    const T operator() (int r,int c) const { return BinaryOp<Op>::apply(m1(r,c), m2(r,c)); }
+    const T operator[] (int n) const { return BinaryOp<Op>::apply(m1[n], m2[n]); }
     int rows() const { return m1.rows(); };
     int cols() const { return m1.cols(); };
     bool is_locked() const { return m1.is_locked() || m2.is_locked(); };
@@ -650,8 +650,8 @@ class Matrix<T,R,C,ScalarOp<Matrix<T1,R,C,E1>,T2,Op> >
     typedef SAME Ref_t;
 
     Matrix<T,R,C,E>(const M &restrict m_, T2 s_) : m(m_), s(s_) {}
-    const T operator() (int r,int c) const { return apply((Op*)0, m(r,c), s); }
-    const T operator[] (int n) const { return apply((Op*)0, m[n], s); }
+    const T operator() (int r,int c) const { return BinaryOp<Op>::apply(m(r,c),s); }
+    const T operator[] (int n) const { return BinaryOp<Op>::apply(m[n], s); }
     int rows() const { return m.rows(); };
     int cols() const { return m.cols(); };
     bool is_locked() const { return m.is_locked(); };

@@ -29,8 +29,8 @@ CXXFLAGS += -DASSIGN_POLICY=AP_manual
 #CXXFLAGS += -DASSIGN_POLICY=AP_conservative
 
 #CXX = g++-3.0
-CXX = icc
-#CXX = g++-3.2
+#CXX = icc
+CXX = g++-3.2
 #CXX = g++
 #CXX = mpiCC
 
