@@ -1,0 +1,445 @@
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:46:03 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.6000
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:46:35 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   2 N: 1000000 tr:    61.9872 time:     0.1100
+VAR D:   2 N: 1000000 tr:    61.9872 time:     0.9400
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:46:53 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   1 N: 1000000 tr:    20.0855 time:     0.0500
+VAR D:   1 N: 1000000 tr:    20.0855 time:     0.2700
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:47:24 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   5 N: 100000 tr:   199.1544 time:     0.0900
+VAR D:   5 N: 100000 tr:   199.1544 time:     0.4900
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:47:59 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   5 N: 1000000 tr:   199.1544 time:     0.7100
+VAR D:   5 N: 1000000 tr:   199.1544 time:    26.1400
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:48:47 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   5 N: 1000000 tr:   199.1544 time:     0.6900
+VAR D:   5 N: 1000000 tr:   199.1544 time:    24.0300
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:50:03 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   5 N: 1000000 tr:   199.1544 time:     0.7200
+VAR D:   5 N: 1000000 tr:   199.1544 time:    18.6600
+
+-> introduced ~Storage
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:52:52 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   5 N: 1000000 tr:   199.1544 time:     0.8700
+VAR D:   5 N: 1000000 tr:   199.1544 time:     4.2300
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:54:19 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.2900
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 15:57:44 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.2900
+
+-- correct prepare_write
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:02:54 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0100
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:35:17 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0000
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:36:05 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2500
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0100
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:37:06 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0200
+
+-- first trials with += and *=
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:38:15 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.4200
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0100
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:39:53 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.4400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.1900
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:39:59 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.4300
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0100
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:40:06 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.4200
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0200
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:40:36 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2500
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0100
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Sep 15 16:41:05 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.4400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0200
+
+-- implemented buf/nobuf
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Mon Sep 16 08:35:09 CEST 2002
+g++-3.0 -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2500
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.0800
+
+-- bad idea: buf(tmp * a) / n
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Mon Sep 16 08:36:33 CEST 2002
+g++-3.0 -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2800
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.1500
+
+-- used +=
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Mon Sep 16 08:38:54 CEST 2002
+g++-3.0 -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2200
+VAR D:   3 N: 1000000 tr:   107.5855 time:     0.8600
+
+-- introduced _clone/_noclone
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Mon Sep 16 08:46:38 CEST 2002
+g++-3.0 -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2200
+VAR D:   3 N: 1000000 tr:   107.5855 time:     0.8600
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 09:47:44 CEST 2002
+g++-3.0 -Wall -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     0.9400
+
+-- after lock and Storage rewriting
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 15:23:26 CEST 2002
+g++-3.0 -Wall -O3 -finline-limit=1500 -funroll-loops
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.1500
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.2000
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 15:26:38 CEST 2002
+g++-3.0 -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.1500
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.1900
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 15:26:55 CEST 2002
+g++-3.0 -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.1500
+VAR D:   3 N: 1000000 tr:   107.5855 time:     1.2300
+
+-- after some fiddling around
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 16:16:54 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.1500
+VAR D:   3 N: 1000000 tr:   107.5855 time:     0.8800
+
+-- after cleaning up Storage
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 16:23:21 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.1400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     0.5700
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 16:24:17 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.2500
+VAR D:   3 N: 1000000 tr:   107.5855 time:     0.5500
+
+-- introduced that strange x into Common_Assignable...
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 16:59:29 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.1400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     0.5800
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 17:01:18 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 1000000 tr:   107.5855 time:     0.1400
+VAR D:   3 N: 1000000 tr:   107.5855 time:     0.6700
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 17:03:16 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.4300
+VAR D:   3 N: 10000000 tr:   107.5855 time:     6.0100
+
+-- unsafe T &Vsize::Matrix::operator=
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 17:35:19 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.4400
+VAR D:   3 N: 10000000 tr:   107.5855 time:     5.5800
+
+-- introduced Access
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Mon Sep 16 19:17:54 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.4400
+VAR D:   3 N: 10000000 tr:   107.5855 time:     5.4900
+
+-- changed Ref_t to SAME
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 12:22:57 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.1200
+VAR D:   3 N: 10000000 tr:   107.5855 time:     6.5300
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 13:48:23 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:  2838.7489 time:     5.9700
+VAR D:   3 N: 10000000 tr:   107.5855 time:     6.3900
+
+-- after all kinds of tuning
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 14:33:38 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.1500
+VAR D:   3 N: 10000000 tr:   107.5855 time:     6.3000
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 14:36:24 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.9800
+VAR D:   3 N: 10000000 tr:   107.5855 time:     6.2400
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 14:39:43 CEST 2002
+g++-3.0 -DNDEBUG -DTWODIM -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.1500
+VAR D:   3 N: 10000000 tr:   107.5855 time:     4.1700
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 14:46:42 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.8700
+VAR D:   3 N: 10000000 tr:   107.5855 time:     6.4000
+
+--mult a
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 14:49:16 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.8600
+VAR D:   3 N: 10000000 tr:   107.5855 time:     5.3700
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 14:50:14 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     4.0400
+VAR D:   3 N: 10000000 tr:   107.5855 time:     4.3000
+
+-- optimized multiply for ONEDIM
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 15:00:24 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.8800
+VAR D:   3 N: 10000000 tr:   107.5855 time:     4.3100
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 15:02:54 CEST 2002
+g++-3.0 -DNDEBUG -DFLATLOOP -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.9000
+VAR D:   3 N: 10000000 tr:   107.5855 time:     4.3000
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 15:17:14 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_norefs
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.1800
+VAR D:   3 N: 10000000 tr:   107.5855 time:     4.1800
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 15:19:25 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.3500
+VAR D:   3 N: 10000000 tr:   107.5855 time:     5.4500
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 15:20:43 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   2 N: 10000000 tr:    61.9872 time:     0.6000
+VAR D:   2 N: 10000000 tr:    61.9872 time:     2.7800
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 15:21:16 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_norefs
+FIX D:   2 N: 10000000 tr:    61.9872 time:     0.9100
+VAR D:   2 N: 10000000 tr:    61.9872 time:     2.3800
+
+-- introduced const
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 16:16:30 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_norefs
+FIX D:   2 N: 10000000 tr:    61.9872 time:     1.3700
+VAR D:   2 N: 10000000 tr:    61.9872 time:     2.4500
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 16:17:07 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_norefs
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.4000
+VAR D:   3 N: 10000000 tr:   107.5855 time:     4.1600
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Sep 17 16:18:48 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.3600
+VAR D:   3 N: 10000000 tr:   107.5855 time:     5.4800
+
+-- merged FSize and VSize
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Oct  1 21:22:34 CEST 2002
+g++ -DNDEBUG -Wall -save-temps -O3 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.9700
+VAR D:   3 N: 10000000 tr:   107.5855 time:    10.1000
+XFX D:   3 N: 10000000 tr:   107.5855 time:     2.9000
+XVR D:   3 N: 10000000 tr:   107.5855 time:     6.5900
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Tue Oct  1 21:23:55 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.3600
+VAR D:   3 N: 10000000 tr:   107.5855 time:     7.1700
+XFX D:   3 N: 10000000 tr:   107.5855 time:     1.4500
+XVR D:   3 N: 10000000 tr:   107.5855 time:     5.0600
+
+-- eliminated old FSize and VSize
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Wed Oct  2 13:00:05 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_manual
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.4400
+VAR D:   3 N: 10000000 tr:   107.5855 time:     5.1200
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Wed Oct  2 13:59:03 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_norefs
+FIX D:   3 N: 10000000 tr:   107.5855 time:     2.5400
+VAR D:   3 N: 10000000 tr:   107.5855 time:     4.1400
+
+Linux spiritus 2.4.19 #1 Thu Aug 8 10:22:27 CEST 2002 i686 unknown
+Wed Oct  2 13:59:30 CEST 2002
+g++-3.0 -DNDEBUG -Wall -save-temps -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.7000
+VAR D:   3 N: 10000000 tr:   107.5855 time:     5.8900
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Sam Okt 12 12:12:13 CEST 2002
+g++-3.2 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.4000
+VAR D:   3 N: 10000000 tr:   107.5855 time:     8.3900
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Sam Okt 12 12:14:53 CEST 2002
+g++-3.2 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -march=athlon -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.5500
+VAR D:   3 N: 10000000 tr:   107.5855 time:     7.7700
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Sam Okt 12 12:15:35 CEST 2002
+g++-3.2 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -march=pentium -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.6100
+VAR D:   3 N: 10000000 tr:   107.5855 time:     7.7800
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Sam Okt 12 12:16:03 CEST 2002
+g++-3.2 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.4100
+VAR D:   3 N: 10000000 tr:   107.5855 time:     8.3600
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Sam Okt 12 12:16:30 CEST 2002
+g++-3.0 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.3000
+VAR D:   3 N: 10000000 tr:   107.5855 time:     7.3500
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Sam Okt 12 12:30:41 CEST 2002
+g++-3.2 -DNDEBUG -Wall -O3 -finline-limit=1500 -funroll-loops -march=pentium -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.6200
+VAR D:   3 N: 10000000 tr:   107.5855 time:     8.7400
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Sam Okt 12 12:33:39 CEST 2002
+g++-3.2 -DNDEBUG -Wall -O3 -finline-limit=2000 -funroll-loops -march=pentium -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.5500
+VAR D:   3 N: 10000000 tr:   107.5855 time:     7.4000
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Okt 13 16:02:25 CEST 2002
+g++-3.2 -DNDEBUG -Wall -O3 -finline-limit=2000 -funroll-loops -march=pentium -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.6600
+VAR D:   3 N: 10000000 tr:   107.5855 time:     7.6300
+
+Linux DeepThought 2.4.19-rc3 #1 Son Jul 21 14:55:17 CEST 2002 i686 unknown unknown GNU/Linux
+Son Okt 13 16:03:20 CEST 2002
+g++-3.2 -DNDEBUG -Wall -O3 -finline-limit=2000 -funroll-loops -march=pentium -DASSIGN_POLICY=AP_automatic
+FIX D:   3 N: 10000000 tr:   107.5855 time:     1.6800
+VAR D:   3 N: 10000000 tr:   107.5855 time:     7.6600
+

@@ -1,0 +1,23 @@
+etLAP - expression template Linear Algebra Package
+
+(also known as "excessively templated Linear Algebra Package")
+
+this C++ library provides simple, lightweight and efficient support
+for vector and matrix calculation. Using expression templates for
+maximum compile time optimization, it is designed from the very beginning
+for utmost speed.
+
+There is support for fixed size objects, allowing loop unrolling (meaning, 
+that with a sensible compiler, 1x1 matrices should add virtually no overhead 
+to plain numbers...) and also for variable sized objects, adding flexibility.
+
+I have not yet done any benchmarks for direct comparison with other 
+libraries, so the excellent performance that theory promises, has yet 
+to be proved...
+
+The library is far from complete, but I'm actively using it for another 
+project, so it is likely to be supported for some time. If you are interested
+in the code in any way, please contact me. Every user I know of will add
+to the chance I spend time on the project.
+
+Norbert Nemec <nnemec@users.sourceforge.net>
