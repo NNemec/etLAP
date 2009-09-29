@@ -62,7 +62,7 @@ inline void fixed() {
          << " N: " << setw(3) << MAX
          << " tr: " << setw(10) << setprecision(4) << setiosflags(ios::fixed) << trace(exp)
          << " time: " << setw(10) << setprecision(4) << setiosflags(ios::fixed) << double(cpptime)/double(CLOCKS_PER_SEC) << "\n";
-};
+}
 
 inline void var() {
     clock_t cpptime;
@@ -85,7 +85,7 @@ inline void var() {
         tmp = tmp * a / n;
 #endif
         exp += tmp;
-    };
+    }
 
     cpptime = clock() - cpptime;
 
@@ -94,9 +94,9 @@ inline void var() {
          << " N: " << setw(3) << MAX
          << " tr: " << setw(10) << setprecision(4) << setiosflags(ios::fixed) << trace(exp)
          << " time: " << setw(10) << setprecision(4) << setiosflags(ios::fixed) << double(cpptime)/double(CLOCKS_PER_SEC) << "\n";
-};
+}
 
 int main() {
     fixed();
     var();
-};
+}

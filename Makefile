@@ -1,4 +1,4 @@
-default: sun_gen
+all: sun_gen exp fsimple benchmark # try_octave  try_gsl
 
 CPPFLAGS =
 CPPFLAGS += -I.

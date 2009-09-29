@@ -27,4 +27,4 @@ Matrix<double,3,3> tmp;
 
 int main() {
     tmp = a;
-};
+}

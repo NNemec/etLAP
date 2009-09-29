@@ -44,4 +44,4 @@ int main() {
     v.clear(); v(0) = 1.0;
     for(int i=0;i<=16;i++)
 	std::cout << SUN_from_suN(2*Pi*i/16.0 * v,*((SUN_MATRIX*)0)) << "\n";
-};
+}

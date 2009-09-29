@@ -67,9 +67,9 @@ class Matrix<std::complex<REAL>,N,N,TagSUNgenerator>
             } else {
                 type = real;
                 b = a-(x/2); // b < a
-            };
-        };
-    };
+            }
+        }
+    }
 
     const T operator() (int r,int c) const {
         switch(type) {
@@ -97,20 +97,20 @@ class Matrix<std::complex<REAL>,N,N,TagSUNgenerator>
         default:
             assert(false);
             throw 0;
-        };
-    };
-    const T operator[] (int n) const { assert(false); throw 0; };
+        }
+    }
+    const T operator[] (int n) const { assert(false); throw 0; }
 
-    int rows() const { return N; };
-    int cols() const { return N; };
+    int rows() const { return N; }
+    int cols() const { return N; }
 
-    bool is_locked() const { return false; };
+    bool is_locked() const { return false; }
 };
 
 template <int N,typename REAL>
 inline Matrix<std::complex<REAL>,N,N,TagSUNgenerator> SUNgenerator(int idx) {
     return Matrix<std::complex<REAL>,N,N,TagSUNgenerator>(idx);
-};
+}
 
 template <typename REAL>
 inline Matrix<std::complex<REAL>,2,2,
@@ -118,7 +118,7 @@ inline Matrix<std::complex<REAL>,2,2,
                        REAL,
                        OpMul> > pauli_sigma(int idx) {
     return SUNgenerator<2,REAL>(idx)*2.0;
-};
+}
 
 
 
@@ -136,7 +136,7 @@ class SUNstructure_values {
         for(uint i=0;i<N*N*N*N*N*N;i++) {
             _nonzero[i] = false;
             _data[i] = 0.0;
-        };
+        }
 
         bool is_diag[N*N];
         for(uint i=0;i<N*N;i++)
@@ -162,23 +162,23 @@ class SUNstructure_values {
                 nonzero(c,b,a) = true;
                 nonzero(b,a,c) = true;
                 nonzero(a,c,b) = true;
-            };
-        };
-    };
+            }
+        }
+    }
 
     REAL value(uint a,uint b,uint c) const {
         assert(a > 0 && a < N*N);
         assert(b > 0 && b < N*N);
         assert(c > 0 && c < N*N);
         return data(a,b,c);
-    };
+    }
 
     bool is_nonzero(uint a,uint b,uint c) {
         assert(a > 0 && a < N*N);
         assert(b > 0 && b < N*N);
         assert(c > 0 && c < N*N);
         return nonzero(a,b,c);
-    };
+    }
 };
 
 template <typename REAL>
@@ -188,14 +188,14 @@ struct SUNstructure_values<1,REAL> {
         assert(b == 0);
         assert(c == 0);
         return 0.0;
-    };
+    }
 
     bool is_nonzero(uint a,uint b,uint c) {
         assert(a == 0);
         assert(b == 0);
         assert(c == 0);
         return false;
-    };
+    }
 };
 
 template <typename REAL>
@@ -207,31 +207,31 @@ struct SUNstructure_values<2,REAL> {
         if(a==b || b==c || c==a)
             return 0.0;
         return REAL((int)((4+b-a)%3)-1);
-    };
+    }
 
     bool is_nonzero(uint a,uint b,uint c) {
         assert(a > 0 && a < 4);
         assert(b > 0 && b < 4);
         assert(c > 0 && c < 4);
         return !(a==b || b==c || c==a);
-    };
+    }
 };
 
 template <int N,typename REAL>
 inline SUNstructure_values<N,REAL> &SUNstructure_val() {
     static SUNstructure_values<N,REAL> value;
     return value;
-};
+}
 
 template <int N,typename REAL>
 inline REAL SUNstructure(uint a,uint b,uint c) {
     return SUNstructure_val<N,REAL>().value(a,b,c);
-};
+}
 
 template <int N,typename REAL>
 inline bool SUNstructure_nonzero(uint a,uint b,uint c) {
     return SUNstructure_val<N,REAL>().is_nonzero(a,b,c);
-};
+}
 
 template <int N,typename REAL,class T1,class T2>
 inline Matrix<std::complex<REAL>,N,N> SUN_from_suN(const Vector<REAL,N==1?1:(N*N-1),T1> &suN_V,const Matrix<std::complex<REAL>,N,N,T2> &dummy) {
@@ -241,16 +241,16 @@ inline Matrix<std::complex<REAL>,N,N> SUN_from_suN(const Vector<REAL,N==1?1:(N*N
         return COMPLEX(cos(suN_V(0)),sin(suN_V(0)));
     else {
         Matrix<COMPLEX,N,N> suN_M = 0;
-        for(uint a=1;a<NCOL*NCOL;a++)
-            suN_M += COMPLEX(0,suN_V(a-1)) * SUNgenerator<NCOL,REAL>(a);
+        for(uint a=1;a<N*N;a++)
+            suN_M += COMPLEX(0,suN_V(a-1)) * SUNgenerator<N,REAL>(a);
 #ifdef USE_OCTAVE
         return octave_exp(suN_M);
 #else
         return exp(suN_M);
 #endif
-    };
-};
+    }
+}
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _ETLAP_SU_N_H_

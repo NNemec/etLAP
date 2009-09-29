@@ -515,3 +515,15 @@ g++-3.2 -Wall -O3 -finline-limit=2000 -funroll-loops -march=athlon -mfpmath=sse 
 FIX D:   3 N: 10000000 tr:   107.5855 time:     1.9200
 VAR D:   3 N: 10000000 tr:   107.5855 time:     8.5800
 
+Linux mumble 2.6.31-10-generic #34-Ubuntu SMP Wed Sep 16 01:09:15 UTC 2009 x86_64 GNU/Linux
+Tue Sep 29 21:40:33 BST 2009
+g++ -Wall -std=c++0x -pedantic -O3 -DASSIGN_POLICY=AP_manual -I. -DNDEBUG
+FIX D:   3 N: 10000000 tr:   107.5855 time:     0.3300
+VAR D:   3 N: 10000000 tr:   107.5855 time:     1.8100
+
+Linux mumble 2.6.31-10-generic #34-Ubuntu SMP Wed Sep 16 01:09:15 UTC 2009 x86_64 GNU/Linux
+Tue Sep 29 21:42:40 BST 2009
+g++ -Wall -std=c++0x -pedantic -O3 -DASSIGN_POLICY=AP_manual -I. -DNDEBUG
+FIX D:   3 N: 10000000 tr:   107.5855 time:     0.2600
+VAR D:   3 N: 10000000 tr:   107.5855 time:     1.5400
+
