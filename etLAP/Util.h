@@ -41,6 +41,6 @@ template<> struct CTAssertClass<true> { static void test() {} };
 
 #define restrict __restrict__
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _ETLAP_UTIL_H_

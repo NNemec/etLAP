@@ -41,7 +41,7 @@ ostream &operator<<(ostream &o,const Vector<T,N,E> &v) {
         o << "," << setw(10) << setprecision(8) << setiosflags(ios::fixed) << v(n);
     o << "]";
     return o;
-};
+}
 
 template <typename T,int R,int C,class E>
 ostream &operator<<(ostream &o,const Matrix<T,R,C,E> &m) {
@@ -52,7 +52,7 @@ ostream &operator<<(ostream &o,const Matrix<T,R,C,E> &m) {
     };
     o << "]]\n";
     return o;
-};
+}
 
 template <typename T,int N>
 ostream &operator<<(ostream &o,const Tuple<T,N> &t) {
@@ -61,8 +61,8 @@ ostream &operator<<(ostream &o,const Tuple<T,N> &t) {
         o << "," << setw(10) << setprecision(8) << setiosflags(ios::fixed) << t[n];
     o << ")";
     return o;
-};
+}
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _ETLAP_OUTPUT_H_

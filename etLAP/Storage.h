@@ -34,43 +34,43 @@ class Storage {
         unsigned int refcount;
         unsigned int size;
 
-        T* data() { return reinterpret_cast<T *>(this + 1); };
-        T& operator[] (unsigned int s) { return data() [s]; };
-        Rep* grab() { ++refcount; return this; };
-        void release() { if (--refcount == 0) delete this; };
+        T* data() { return reinterpret_cast<T *>(this + 1); }
+        T& operator[] (unsigned int s) { return data() [s]; }
+        Rep* grab() { ++refcount; return this; }
+        void release() { if (--refcount == 0) delete this; }
 
         static void *operator new(size_t s, unsigned int extra) {
 //            return Allocator::allocate(s + extra * sizeof (T));
             return ::operator new(s + extra * sizeof (T));
-        };
+        }
 
         static void operator delete(void *ptr) {
             ::operator delete(ptr);
 //            Allocator::deallocate(ptr, sizeof(Rep) +
 //                                  reinterpret_cast<Rep *>(ptr)->size * sizeof (T));
-        };
+        }
 
         static Rep *create (unsigned int size_) {
             Rep *p = new (size_) Rep;
             p->refcount = 1;
             p->size = size_;
             return p;
-        };
+        }
 
         Rep *clone() {
             Rep *p = create(size);
             p->copy_from(data());
             return p;
-        };
+        }
 
         void copy_from(const T *src) {
             for(unsigned n=0;n<size;n++) data()[n] = src[n];
-        };
+        }
 
         void clear() {
             for(unsigned int n=0;n<size;n++)
                 etLAP::clear(data()[n]);
-        };
+        }
 
     private:
         Rep &operator= (const Rep &);
@@ -80,7 +80,7 @@ class Storage {
     mutable bool souvereign;
 
   public:
-    Storage<T>() { rep = 0; };
+    Storage<T>() { rep = 0; }
     ~Storage<T>() { if(rep) rep->release(); }
 
     Storage<T>(const Storage<T> &other) {
@@ -90,19 +90,19 @@ class Storage {
             souvereign = false;
         } else {
             rep = 0;
-        };
-    };
+        }
+    }
 
     Storage<T>(unsigned int size) {
         rep = Rep::create(size);
         souvereign = true;
-    };
+    }
 
     Storage<T>(T *ptr,unsigned int size) {
         rep = Rep::create(size);
         rep->copy_from(ptr);
         souvereign = true;
-    };
+    }
 
     Storage<T> &operator=(const Storage<T> &other) {
         if(rep)
@@ -113,9 +113,9 @@ class Storage {
             souvereign = false;
         } else {
             rep = 0;
-        };
+        }
         return *this;
-    };
+    }
 
     T operator[](unsigned int i) const { assert(rep); return (*rep)[i]; }
     T &operator[](unsigned int i) { assert(rep); assert(souvereign); return (*rep)[i]; }
@@ -125,12 +125,12 @@ class Storage {
         if(rep) rep->release();
         rep = Rep::create(size);
         souvereign = true;
-    };
+    }
 
     void clear() {
         prepare_write_noclone();
         rep->clear();
-    };
+    }
 
     void prepare_write_clone() {
         assert(rep);
@@ -142,7 +142,7 @@ class Storage {
             rep = r;
         };
         souvereign = true;
-    };
+    }
 
     void prepare_write_noclone() {
         assert(rep);
@@ -154,12 +154,12 @@ class Storage {
             rep = Rep::create(size);
         };
         souvereign = true;
-    };
-    
-    T *rawdata() { return rep->data(); };
+    }
+
+    T *rawdata() { return rep->data(); }
     // be careful with this one -- only use it if you know exactly what you are doing!
 };
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _ETLAP_STORAGE_H_

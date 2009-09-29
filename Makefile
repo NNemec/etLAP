@@ -10,6 +10,7 @@ CPPFLAGS += -DNDEBUG
 CXXFLAGS =
 # $(CPPFLAGS)
 CXXFLAGS += -Wall
+CXXFLAGS += -std=c++0x -pedantic
 #CXXFLAGS += -save-temps
 CXXFLAGS += -O3
 #CXXFLAGS += -finline-limit=2000
@@ -28,9 +29,7 @@ CXXFLAGS += -DASSIGN_POLICY=AP_manual
 #CXXFLAGS += -DASSIGN_POLICY=AP_automatic
 #CXXFLAGS += -DASSIGN_POLICY=AP_conservative
 
-#CXX = g++-3.0
 #CXX = icc
-#CXX = g++-3.2
 CXX = g++
 #CXX = mpiCC
 

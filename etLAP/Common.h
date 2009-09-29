@@ -52,7 +52,7 @@ class Vector;
 template <typename T=double,int R=0,int C=0,class EngineTag=etLAP_DEFAULT_ENGINE>
 class Matrix;
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #include "Util.h"
 #include "Types.h"
@@ -116,7 +116,7 @@ class Common_Smart
         } else {
             unlock();
             assign(*(SAME *)this,src,typename TypeCast<T,X>::Cast_t());
-        };
+        }
 #elif ASSIGN_POLICY == AP_conservative
         assign(*(SAME *)this,buf(src),typename TypeCast<T,X>::Cast_t());
 #elif ASSIGN_POLICY == AP_norefs
@@ -124,7 +124,7 @@ class Common_Smart
 #else
 #error ASSIGN_POLICY not defined!!
 #endif
-    };
+    }
 
 #if ASSIGN_POLICY==AP_automatic || (ASSIGN_POLICY==AP_manual && !defined(NDEBUG))
     bool is_locked() const { return l; }
@@ -140,11 +140,11 @@ class Common_Packed
     template<typename X>
     void assign_from(const X &src) {
         assign(*(SAME *)this,src,typename TypeCast<T,X>::Cast_t());
-    };
+    }
 
     bool is_locked() const { return false; }
 };
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _ETLAP_COMMON_H_

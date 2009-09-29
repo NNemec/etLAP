@@ -89,6 +89,6 @@ class OpIsNeq;
 
 class OpRevMul;
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _ETLAP_TAGS_H_

@@ -37,7 +37,7 @@ struct UnaryOp<OPTAG,Vector<T,N,E> > {                                          
     typedef Vector<typename UnaryOp<OPTAG,T>::Result_t,N,ElemUnOp<Vector<T,N,E>,OPTAG> > Result_t;  \
     static Result_t apply(const Vector<T,N,E> &v) {                                                 \
         return Result_t(v);                                                                         \
-    };                                                                                              \
+    }                                                                                              \
 };
 
 DefineVectorElemUnOp(OpIdent)
@@ -53,7 +53,7 @@ struct UnaryOp<OPTAG,Matrix<T,R,C,E> > {                                        
     typedef Matrix<typename UnaryOp<OPTAG,T>::Result_t,R,C,ElemUnOp<Matrix<T,R,C,E>,OPTAG> > Result_t;  \
     static Result_t apply(const Matrix<T,R,C,E> &m) {                                                   \
         return Result_t(m);                                                                             \
-    };                                                                                                  \
+    }                                                                                                  \
 };
 
 DefineMatrixElemUnOp(OpIdent)
@@ -71,9 +71,9 @@ struct UnaryOp<OpSqr,Vector<T,N,E> > {
         Result_t res = 0;
         for (int n = a.size(); n-- > 0;) {
             res += sqr(a(n));
-        };
+        }
         return res;
-    };
+    }
 };
 
 
@@ -82,7 +82,7 @@ template <int R,int C,typename T,class E>
 inline const Matrix<T,R,C,Transposed<Matrix<T,C,R,E> > >
 transpose(const Matrix<T,C,R,E> &m) {
     return Matrix<T,R,C,Transposed<Matrix<T,C,R,E> > >(m);
-};
+}
 
 // adj(Matrix)
 template <typename T,int R,int C,class E>
@@ -90,7 +90,7 @@ inline const Matrix<T,C,R,Transposed<Matrix<T,R,C,ElemUnOp<Matrix<T,R,C,E>,OpCon
 //inline typeof(transpose(conj(Matrix<T,R,C,E>)))
 adj(const Matrix<T,R,C,E> &m) {
     return transpose(conj(m));
-};
+}
 
 // trace(Matrix)
 template <int N,typename T,class E>
@@ -99,14 +99,14 @@ inline T trace(const Matrix<T,N,N,E> &m) {
     T res = (T)0;
     for(int i=m.rows();i-->0;) res += m(i,i);
     return res;
-};
+}
 
 // det(Matrix)
 template <typename T,class E>
 inline T det(const Matrix<T,2,2,E> &m) {
     assert(m.rows() == m.cols());
     return m(0,0)*m(1,1)-m(0,1)*m(1,0);
-};
+}
 
 // inv(Matrix)
 template <int N,typename T,class E>
@@ -123,7 +123,7 @@ inline const Matrix<T,N,N> inv(Matrix<T,N,N,E> a) {
             if (abs(a(r, c)) > abs(pivot)) {
                 rmax = r;
                 pivot = a(r, c);
-            };
+            }
         for (int i = size; i-- > 0;) {
             T x = a(rmax, i);
             a(rmax, i) = a(c, i);
@@ -132,18 +132,18 @@ inline const Matrix<T,N,N> inv(Matrix<T,N,N,E> a) {
             x = res(rmax, i);
             res(rmax, i) = res(c, i);
             res(c, i) = x / pivot;
-        };
+        }
         for (int r = size; r-- > 0;)
             if (r != c) {
                 pivot = a(r, c);
                 for (int i = size; i-- > 0;) {
                     a(r, i) -= pivot * a(c, i);
                     res(r, i) -= pivot * res(c, i);
-                };
-            };
-    };
+                }
+            }
+    }
     return res;
-};
+}
 
 
 // max(Matrix)
@@ -156,7 +156,7 @@ inline const typename UnaryOp<OpAbs,T>::Result_t max(Matrix<T,R,C,E> a) {
     for (int c = a.cols(); c-- > 0;)
         res = max(res,abs(a(r,c)));
     return res;
-};
+}
 
 // simplemax(Matrix)
 template <typename T,int R,int C,class E>
@@ -168,7 +168,7 @@ inline const typename UnaryOp<OpAbs,T>::Result_t simplemax(Matrix<T,R,C,E> a) {
     for (int c = a.cols(); c-- > 0;)
         res = max(res,fabs(a(r,c)));
     return res;
-};
+}
 
 // simplemax(Matrix)
 template <typename T,int R,int C,class E>
@@ -180,7 +180,7 @@ inline const typename UnaryOp<OpAbs,T>::Result_t simplemax(Matrix<std__complex<T
     for (int c = a.cols(); c-- > 0;)
         res = max(res,max(fabs(real(a(r,c))),fabs(imag(a(r,c)))));
     return res;
-};
+}
 
 
 // exp(Matrix)
@@ -216,7 +216,7 @@ inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
             res1 = res2+tmp1;
             if(res1 == res2)
                 return res1;
-        };
+        }
 /*
         std::cerr << "exp(Matrix) failed:\n"
                      "a=" << a << "\n"
@@ -231,50 +231,50 @@ inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
 */
         abort();
         throw "exp(Matrix) failed!!";
-    };
-};
+    }
+}
 
 // buf(Vector)
 template <typename T,int N,class E>
 inline const Vector<T,N,Buffer>
 buf(const Vector<T,N,E> &v) {
     return Vector<T,N,Buffer>(v);
-};
+}
 
 // buf(Vector<Buffer>)
 template <typename T,int N>
 inline const Vector<T,N,Buffer>
 buf(const Vector<T,N,Buffer> &v) {
     return v;
-};
+}
 
 // buf(Matrix)
 template <typename T,int R,int C,class E>
 inline const Matrix<T,R,C,Buffer>
 buf(const Matrix<T,R,C,E> &m) {
     return Matrix<T,R,C,Buffer>(m);
-};
+}
 
 // buf(Matrix<Buffer>)
 template <typename T,int R,int C,class E>
 inline const Matrix<T,R,C,Buffer>
 buf(const Matrix<T,R,C,Buffer> &m) {
     return m;
-};
+}
 
 // nobuf(Vector)
 template <typename T,int N,class E>
 inline const Vector<T,N,NoBuffer<Vector<T,N,E> > >
 nobuf(const Vector<T,N,E> &m) {
     return Vector<T,N,NoBuffer<Vector<T,N,E> > >(m);
-};
+}
 
 // nobuf(Matrix)
 template <typename T,int R,int C,class E>
 inline const Matrix<T,R,C,NoBuffer<Matrix<T,R,C,E> > >
 nobuf(const Matrix<T,R,C,E> &m) {
     return Matrix<T,R,C,NoBuffer<Matrix<T,R,C,E> > >(m);
-};
+}
 
 /******************************************************************************
  * Binary operator structures
@@ -292,7 +292,7 @@ struct BinaryOp<OpAdd,Vector<T1,N1,E1>,Vector<T2,N2,E2> > {
     static Result_t apply(const X1 &x1,const X2 &x2) {
         assert(x1.size() == x2.size());
         return Result_t(x1,x2);
-    };
+    }
 };
 
 // Vector - Vector
@@ -307,7 +307,7 @@ struct BinaryOp<OpSub,Vector<T1,N1,E1>,Vector<T2,N2,E2> > {
     static Result_t apply(const X1 &x1,const X2 &x2) {
         assert(x1.size() == x2.size());
         return Result_t(x1,x2);
-    };
+    }
 };
 
 // Vector * Scalar
@@ -317,7 +317,7 @@ struct BinaryOp<OpMul,Vector<T1,N,E1>,T2> {
     typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef ScalarOp<V,T2,OpMul> E;
     typedef Vector<T,N,E> Result_t;
-    static Result_t apply(const V &v,const T2 &s) { return Result_t(v,s); };
+    static Result_t apply(const V &v,const T2 &s) { return Result_t(v,s); }
 };
 
 // Vector / Scalar
@@ -327,7 +327,7 @@ struct BinaryOp<OpDiv,Vector<T1,N,E1>,T2> {
     typedef typename BinaryOp<OpDiv,T1,T2>::Result_t T;
     typedef ScalarOp<V,T2,OpDiv> E;
     typedef Vector<T,N,E> Result_t;
-    static Result_t apply(const V &v,const T2 &s) { return Result_t(v,s); };
+    static Result_t apply(const V &v,const T2 &s) { return Result_t(v,s); }
 };
 
 // Scalar * Vector
@@ -337,7 +337,7 @@ struct BinaryOp<OpMul,T1,Vector<T2,N,E2> > {
     typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef ScalarOp<V,T1,OpRevMul> E;
     typedef Vector<T,N,E> Result_t;
-    static Result_t apply(const T1 &s,const V &v) { return Result_t(v,s); };
+    static Result_t apply(const T1 &s,const V &v) { return Result_t(v,s); }
 };
 
 // Vector * Vector
@@ -352,7 +352,7 @@ struct BinaryOp<OpMul,Vector<T1,N1,E1>,Vector<T2,N2,E2> > {
         Result_t res = (Result_t)0;
         for(int i=v1.size();i-->0;) res += BinaryOp<OpMul,T1,T2>::apply(v1(i),v2(i));
         return res;
-    };
+    }
 };
 
 // Vector == Vector
@@ -368,7 +368,7 @@ struct BinaryOp<OpIsEq,Vector<T1,N1,E1>,Vector<T2,N2,E2> > {
             if(! v1(i) == v2(i))
                 return false;
         return true;
-    };
+    }
 };
 
 // Matrix + Matrix
@@ -384,7 +384,7 @@ struct BinaryOp<OpAdd,Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > {
     static Result_t apply(const X1 &x1,const X2 &x2) {
         assert(x1.rows() == x2.rows() && x1.cols() == x2.cols());
         return Result_t(x1,x2);
-    };
+    }
 };
 
 // Matrix - Matrix
@@ -400,7 +400,7 @@ struct BinaryOp<OpSub,Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > {
     static Result_t apply(const X1 &x1,const X2 &x2) {
         assert(x1.rows() == x2.rows() && x1.cols() == x2.cols());
         return Result_t(x1,x2);
-    };
+    }
 };
 
 // Matrix * Scalar
@@ -410,7 +410,7 @@ struct BinaryOp<OpMul,Matrix<T1,R,C,E1>,T2> {
     typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef ScalarOp<M,T2,OpMul> E;
     typedef Matrix<T,R,C,E> Result_t;
-    static Result_t apply(const M &m,const T2 &s) { return Result_t(m,s); };
+    static Result_t apply(const M &m,const T2 &s) { return Result_t(m,s); }
 };
 
 // Matrix / Scalar
@@ -420,7 +420,7 @@ struct BinaryOp<OpDiv,Matrix<T1,R,C,E1>,T2> {
     typedef typename BinaryOp<OpDiv,T1,T2>::Result_t T;
     typedef ScalarOp<M,T2,OpDiv> E;
     typedef Matrix<T,R,C,E> Result_t;
-    static Result_t apply(const M &m,const T2 &s) { return Result_t(m,s); };
+    static Result_t apply(const M &m,const T2 &s) { return Result_t(m,s); }
 };
 
 // Scalar * Matrix
@@ -430,7 +430,7 @@ struct BinaryOp<OpMul,T1,Matrix<T2,R,C,E2> > {
     typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef ScalarOp<M,T1,OpRevMul> E;
     typedef Matrix<T,R,C,E> Result_t;
-    static Result_t apply(const T1 &s,const M &m) { return Result_t(m,s); };
+    static Result_t apply(const T1 &s,const M &m) { return Result_t(m,s); }
 };
 
 // Matrix + Scalar
@@ -445,7 +445,7 @@ struct BinaryOp<OpAdd,Matrix<T1,R,C,E1>,T2> {
         CTAssert(R == C);
         assert(m.rows() == m.cols());
         return Result_t(m,X2(m.rows(),s));
-    };
+    }
 };
 
 // Matrix - Scalar
@@ -460,7 +460,7 @@ struct BinaryOp<OpSub,Matrix<T1,R,C,E1>,T2> {
         CTAssert(R == C);
         assert(m.rows() == m.cols());
         return Result_t(m,X2(m.rows(),s));
-    };
+    }
 };
 
 // Scalar + Matrix
@@ -475,7 +475,7 @@ struct BinaryOp<OpAdd,T1,Matrix<T2,R,C,E2> > {
         CTAssert(R == C);
         assert(m.rows() == m.cols());
         return Result_t(X1(m.rows(),s),m);
-    };
+    }
 };
 
 // Scalar - Matrix
@@ -490,7 +490,7 @@ struct BinaryOp<OpSub,T1,Matrix<T2,R,C,E2> > {
         CTAssert(R == C);
         assert(m.rows() == m.cols());
         return Result_t(X1(m.rows(),s),m);
-    };
+    }
 };
 
 // Matrix * Matrix
@@ -507,7 +507,7 @@ struct BinaryOp<OpMul,Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > {
     static const int C = R1?C2:0;
     typedef Multiplied<X1_buf,X2_buf> E;
     typedef Matrix<T,R,C,E> Result_t;
-    static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.cols() == x2.rows()); return Result_t(x1,x2); };
+    static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.cols() == x2.rows()); return Result_t(x1,x2); }
 };
 
 // Vector * Matrix
@@ -521,7 +521,7 @@ struct BinaryOp<OpMul,Vector<T1,N1,E1>,Matrix<T2,R2,C2,E2> > {
     typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef Multiplied<X1_buf,X2_buf> E;
     typedef Vector<T,C2,E> Result_t;
-    static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.size() == x2.rows()); return Result_t(x1,x2); };
+    static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.size() == x2.rows()); return Result_t(x1,x2); }
 };
 
 // Matrix * Vector
@@ -535,7 +535,7 @@ struct BinaryOp<OpMul,Matrix<T1,R1,C1,E1>,Vector<T2,N2,E2> > {
     typedef typename BinaryOp<OpMul,T1,T2>::Result_t T;
     typedef Multiplied<X1_buf,X2_buf> E;
     typedef Vector<T,R1,E> Result_t;
-    static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.cols() == x2.size()); return Result_t(x1,x2); };
+    static Result_t apply(const X1 &x1,const X2 &x2) { assert(x1.cols() == x2.size()); return Result_t(x1,x2); }
 };
 
 // commute(Matrix,Matrix)
@@ -558,7 +558,7 @@ inline const Matrix<typename BinaryOp<OpMul,T1,T2>::Result_t,N,N> commute(const 
         } else {
             return m1*m2-m2*m1;
         }
-};
+}
 
 // Matrix == Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
@@ -574,7 +574,7 @@ struct BinaryOp<OpIsEq,Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > {
             if(! (m1(r,c) == m2(r,c)))
                 return false;
         return true;
-    };
+    }
 };
 
 
@@ -656,7 +656,7 @@ inline const Vector<T1,N1,E1> &
 operator+=(Vector<T1,N1,E1> &v1,const Vector<T2,N2,E2> &v2) {
     assign_add(v1,v2);
     return v1;
-};
+}
 
 // Vector -= Vector
 template <typename T1,int N1,class E1,typename T2,int N2,class E2>
@@ -664,7 +664,7 @@ inline const Vector<T1,N1,E1> &
 operator-=(Vector<T1,N1,E1> &v1,const Vector<T2,N2,E2> &v2) {
     assign_sub(v1,v2);
     return v1;
-};
+}
 
 // Vector *= Scalar
 template <typename T1,int N1,class E1,typename T2>
@@ -672,7 +672,7 @@ inline const Vector<T1,N1,E1> &
 operator*=(Vector<T1,N1,E1> &v,const T2 &s) {
     assign_mul(v,s);
     return v;
-};
+}
 
 // Vector /= Scalar
 template <typename T1,int N1,class E1,typename T2>
@@ -680,7 +680,7 @@ inline const Vector<T1,N1,E1> &
 operator/=(Vector<T1,N1,E1> &v,const T2 &s) {
     assign_div(v,s);
     return v;
-};
+}
 
 // Vector *= Matrix
 template <typename T1,int N1,class E1,typename T2,int N2,class E2>
@@ -689,7 +689,7 @@ operator*=(Vector<T1,N1,E1> &v,const Matrix<T2,N2,N2,E2> &m) {
     CTAssert(N1==0 || N2==0 || N1 == N2);
     assert(m.cols() == m.rows() && v.size() == m.rows());
     return v = buf(v * m);
-};
+}
 
 // Matrix += Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
@@ -697,7 +697,7 @@ inline const Matrix<T1,R1,C1,E1> &
 operator+=(Matrix<T1,R1,C1,E1> &m1,const Matrix<T2,R2,C2,E2> &m2) {
     assign_add(m1,m2);
     return m1;
-};
+}
 
 // Matrix -= Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int R2,int C2,class E2>
@@ -705,7 +705,7 @@ inline const Matrix<T1,R1,C1,E1> &
 operator-=(Matrix<T1,R1,C1,E1> &m1,const Matrix<T2,R2,C2,E2> &m2) {
     assign_sub(m1,m2);
     return m1;
-};
+}
 
 // Matrix *= Scalar
 template <typename T1,int R1,int C1,class E1,typename T2>
@@ -713,7 +713,7 @@ inline const Matrix<T1,R1,C1,E1> &
 operator*=(Matrix<T1,R1,C1,E1> &m,const T2 &s) {
     assign_mul(m,s);
     return m;
-};
+}
 
 // Matrix /= Scalar
 template <typename T1,int R1,int C1,class E1,typename T2>
@@ -721,7 +721,7 @@ inline const Matrix<T1,R1,C1,E1> &
 operator/=(Matrix<T1,R1,C1,E1> &m,const T2 &s) {
     assign_div(m,s);
     return m;
-};
+}
 
 // Matrix *= Matrix
 template <typename T1,int R1,int C1,class E1,typename T2,int N2,class E2>
@@ -730,7 +730,7 @@ operator*=(Matrix<T1,R1,C1,E1> &m1,const Matrix<T2,N2,N2,E2> &m2) {
     CTAssert(C1==0 || N2==0 || C1 == N2);
     assert(m2.cols() == m2.rows() && m1.cols() == m2.rows());
     return m1 = buf(m1 * m2);
-};
+}
 
 /******************************************************************************
  * Special "clear" operator
@@ -739,18 +739,18 @@ operator*=(Matrix<T1,R1,C1,E1> &m1,const Matrix<T2,N2,N2,E2> &m2) {
 template <typename T>
 void clear(T &t) {
     t = (T)0;
-};
+}
 
 template <typename T,int N,class E>
 void clear(Vector<T,N,E> &v) {
     v.clear();
-};
+}
 
 template <typename T,int R,int C,class E>
 void clear(Matrix <T,R,C,E> &m) {
     m.clear();
-};
+}
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _ETLAP_OPERATOR_H_

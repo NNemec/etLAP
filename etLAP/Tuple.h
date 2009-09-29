@@ -29,7 +29,7 @@ class Tuple {
     T t[N];
 
   public:
-    Tuple<T,N>() {};
+    Tuple<T,N>() {}
     explicit Tuple<T,N>(const T &t_) { for(int i=N;i-->0;) t[i]=t_; }
 
     Tuple<T,N>(const Tuple<T,N-1> &tp_,const T &t_) { for(int i=N-1;i-->0;) t[i]=tp_[i]; t[N-1] = t_; }
@@ -53,7 +53,7 @@ class Tuple {
 template <typename T>
 class Tuple<T,0> {
   public:
-    Tuple<T,0>() {};
+    Tuple<T,0>() {}
     explicit Tuple<T,0>(const T &t_) {}
 
     Tuple<T,0>(const Tuple<T,0> &tp1_,const Tuple<T,0> &tp2_) {}
@@ -65,22 +65,22 @@ class Tuple<T,0> {
 template <typename T,int N1,int N2>
 inline Tuple<T,N1+N2> operator,(const Tuple<T,N1> &t1,const Tuple<T,N2> &t2) {
     return Tuple<T,N1+N2>(t1,t2);
-};
+}
 
 template <typename T,int N>
 inline Tuple<T,1+N> operator,(const T &t1,const Tuple<T,N> &t2) {
     return Tuple<T,1+N>(t1,t2);
-};
+}
 
 template <typename T,int N>
 inline Tuple<T,N+1> operator,(const Tuple<T,N> &t1,const T &t2) {
     return Tuple<T,N+1>(t1,t2);
-};
+}
 
 template <typename T>
 inline Tuple<T,1> _tuple_(const T &t) {
     return Tuple<T,1>(t);
-};
+}
 
 #if __GNUC__ == 2
 #define tuple(t,args...) (::etLAP::_tuple_(t) , ##args)
@@ -88,6 +88,6 @@ inline Tuple<T,1> _tuple_(const T &t) {
 #define tuple(t,...) (::etLAP::_tuple_(t) , ##__VA_ARGS__)
 #endif
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _ETLAP_TUPLE_H_

@@ -43,25 +43,25 @@ class Vector<T,N,Smart>
     typedef const SAME &Ref_t;
 #endif
 
-    Vector<T,N,E>() {};
+    Vector<T,N,E>() {}
     template<typename X>
-    Vector<T,N,E>(const X &src) { assign_from(src); };
+    Vector<T,N,E>(const X &src) { assign_from(src); }
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; }
 
-    void resize(int sz_) { assert(sz_ == N); };
-    void clear() { for(int n=N;n-->0;) etLAP::clear(data[n]); };
+    void resize(int sz_) { assert(sz_ == N); }
+    void clear() { for(int n=N;n-->0;) etLAP::clear(data[n]); }
 
-    const T operator() (int n) const { return data[n]; };
-    T &operator() (int n,bool unsafe=false) { return data[n]; };
+    const T operator() (int n) const { return data[n]; }
+    T &operator() (int n,bool unsafe=false) { return data[n]; }
 
-    T *rawdata() { return &data[0]; };
+    T *rawdata() { return &data[0]; }
     // be careful with this one -- only use it if you know exactly what you are doing!
 
-    int size() const { return N; };
+    int size() const { return N; }
 
-    void prepare_write_clone() {};
-    void prepare_write_noclone() {};
+    void prepare_write_clone() {}
+    void prepare_write_noclone() {}
 };
 
 /*****************************************************************************
@@ -84,21 +84,21 @@ class Vector<T,0,Smart>
     typedef const SAME &Ref_t;
 #endif
 
-    Vector<T,0,E>(): sz(0) {};
-    Vector<T,0,E>(int sz_): sz(sz_),data(sz) {};
+    Vector<T,0,E>(): sz(0) {}
+    Vector<T,0,E>(int sz_): sz(sz_),data(sz) {}
 
     template<typename X>
-    Vector<T,0,E>(const X &src) { sz=-1; assign_from(src); };
+    Vector<T,0,E>(const X &src) { sz=-1; assign_from(src); }
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; }
 
-    void resize(int sz_) { sz=sz_;data.resize(sz); };
-    void clear() { data.clear(); };
+    void resize(int sz_) { sz=sz_;data.resize(sz); }
+    void clear() { data.clear(); }
 
-    const T operator() (int n) const { return data[n]; };
-    T &operator() (int n,bool unsafe=false) { if(!unsafe)prepare_write_clone(); return data[n]; };
+    const T operator() (int n) const { return data[n]; }
+    T &operator() (int n,bool unsafe=false) { if(!unsafe)prepare_write_clone(); return data[n]; }
 
-    T *rawdata() { return data.rawdata(); };
+    T *rawdata() { return data.rawdata(); }
     // be careful with this one -- only use it if you know exactly what you are doing!
 
     int size() const { return sz; }
@@ -125,25 +125,25 @@ class Vector<T,N,Packed>
     typedef const SAME &Ref_t;
 #endif
 
-    Vector<T,N,E>() {};
+    Vector<T,N,E>() {}
     template<typename X>
-    Vector<T,N,E>(const X &src) { assign_from(src); };
+    Vector<T,N,E>(const X &src) { assign_from(src); }
     template<typename X>
-    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; };
+    const SAME &operator=(const X &src) { assign_from(src); return *(SAME *)this; }
 
-    void resize(int sz_) { assert(sz_ == N); };
-    void clear() { for(int n=N;n-->0;) etLAP::clear(data[n]); };
+    void resize(int sz_) { assert(sz_ == N); }
+    void clear() { for(int n=N;n-->0;) etLAP::clear(data[n]); }
 
-    const T operator() (int n) const { return data[n]; };
-    T &operator() (int n,bool unsafe=false) { return data[n]; };
+    const T operator() (int n) const { return data[n]; }
+    T &operator() (int n,bool unsafe=false) { return data[n]; }
 
-    T *rawdata() { return &data[0]; };
+    T *rawdata() { return &data[0]; }
     // be careful with this one -- only use it if you know exactly what you are doing!
 
-    int size() const { return N; };
+    int size() const { return N; }
 
-    void prepare_write_clone() {};
-    void prepare_write_noclone() {};
+    void prepare_write_clone() {}
+    void prepare_write_noclone() {}
 };
 
 /*****************************************************************************
@@ -166,7 +166,7 @@ inline void assign(Vector<TD,ND,ED> &dest,const Vector<TS,NS,ES> &src,CAST_TAG) 
     dest.prepare_write_noclone();
     for(int i=dest.size();i-->0;)
         assign(dest(i,true),src(i));
-};
+}
 
 // Vector = Tuple
 
@@ -177,7 +177,7 @@ inline void assign(Vector<TD,ND,E> &dest,const Tuple<TS,NS> &src,CAST_TAG) {
     dest.prepare_write_noclone();
     for(int i=dest.size();i-->0;)
         assign(dest(i,true),src[i]);
-};
+}
 
 // Vector += Vector
 
@@ -188,7 +188,7 @@ inline void assign_add(Vector<TD,ND,ED> &restrict dest,const Vector<TS,NS,ES> &r
     dest.prepare_write_clone();
     for(int i=dest.size();i-->0;)
         assign_add(dest(i,true),src(i));
-};
+}
 
 // Vector -= Vector
 
@@ -199,7 +199,7 @@ inline void assign_sub(Vector<TD,ND,ED> &restrict dest,const Vector<TS,NS,ES> &r
     dest.prepare_write_clone();
     for(int i=dest.size();i-->0;)
         assign_sub(dest(i,true),src(i));
-};
+}
 
 // Vector *= Scalar
 
@@ -208,7 +208,7 @@ inline void assign_mul(Vector<TD,N,E> &restrict dest,TS s) {
     dest.prepare_write_clone();
     for(int i=dest.size();i-->0;)
         assign_mul(dest(i,true),s);
-};
+}
 
 // Vector /= Scalar
 
@@ -217,7 +217,7 @@ inline void assign_div(Vector<TD,N,E> &restrict dest,TS s) {
     dest.prepare_write_clone();
     for(int i=dest.size();i-->0;)
         assign_div(dest(i,true),s);
-};
+}
 
 /*****************************************************************************
  *  Trivials
@@ -230,10 +230,10 @@ class Vector<T,N,Zero>
   public:
     typedef SAME Ref_t;
 
-    Vector<T,N,Zero>() {};
+    Vector<T,N,Zero>() {}
     T operator() (int n) const { return (T)0; }
     int size() const { return N; }
-    bool is_locked() const { return false; };
+    bool is_locked() const { return false; }
 };
 
 template <typename T>
@@ -245,10 +245,10 @@ class Vector<T,0,Zero>
   public:
     typedef SAME Ref_t;
 
-    Vector<T,0,Zero>(int sz_): sz(sz_) {};
+    Vector<T,0,Zero>(int sz_): sz(sz_) {}
     T operator() (int n) const { return (T)0; }
     int size() const { return sz; }
-    bool is_locked() const { return false; };
+    bool is_locked() const { return false; }
 };
 
 /*****************************************************************************
@@ -269,7 +269,7 @@ class Vector<T,N,ElemUnOp<Vector<T1,N,E1>,Op> >
     Vector<T,N,E>(const V &v_) : v(v_) {}
     T operator() (int n) const { return UnaryOp<Op>::apply(v(n)); }
     int size() const { return v.size(); }
-    bool is_locked() const { return v.is_locked(); };
+    bool is_locked() const { return v.is_locked(); }
 };
 
 template <int N,typename T,typename T1,class E1,typename T2,class E2,class Op>
@@ -288,7 +288,7 @@ class Vector<T,N,ElemBinOp<Vector<T1,N,E1>,Vector<T2,N,E2>,Op> >
     Vector<T,N,E>(const V1 &v1_, const V2 &v2_) : v1(v1_), v2(v2_) {}
     T operator() (int n) const { return BinaryOp<Op>::apply(v1(n),v2(n)); }
     int size() const { return v1.size(); }
-    bool is_locked() const { return v1.is_locked() || v2.is_locked(); };
+    bool is_locked() const { return v1.is_locked() || v2.is_locked(); }
 };
 
 template <int N,typename T,typename T1,class E1,typename T2,class Op>
@@ -306,7 +306,7 @@ class Vector<T,N,ScalarOp<Vector<T1,N,E1>,T2,Op> >
     Vector<T,N,E>(const V &v_, T2 s_) : v(v_), s(s_) {}
     T operator() (int n) const { return BinaryOp<Op>::apply(v(n),s); }
     int size() const { return v.size(); }
-    bool is_locked() const { return v.is_locked(); };
+    bool is_locked() const { return v.is_locked(); }
 };
 
 /*****************************************************************************
@@ -324,10 +324,10 @@ class Vector<T,N,Buffer>
     typedef SAME Ref_t;
 
     template <class E1>
-    Vector<T,N,E>(const Vector<T,N,E1> &v_) : buf(v_) {};
-    T operator() (int n) const { return buf(n); };
-    int size() const { return buf.size(); };
-    bool is_locked() const { return false; };
+    Vector<T,N,E>(const Vector<T,N,E1> &v_) : buf(v_) {}
+    T operator() (int n) const { return buf(n); }
+    int size() const { return buf.size(); }
+    bool is_locked() const { return false; }
 };
 
 template <typename T>
@@ -341,10 +341,10 @@ class Vector<T,0,Buffer>
     typedef SAME Ref_t;
 
     template <class E1>
-    Vector<T,0,E>(const Vector<T,0,E1> &v_) : buf(v_) {};
-    T operator() (int n) const { return buf(n); };
-    int size() const { return buf.size(); };
-    bool is_locked() const { return false; };
+    Vector<T,0,E>(const Vector<T,0,E1> &v_) : buf(v_) {}
+    T operator() (int n) const { return buf(n); }
+    int size() const { return buf.size(); }
+    bool is_locked() const { return false; }
 };
 
 template <int N,typename T,class E1>
@@ -360,8 +360,8 @@ class Vector<T,N,NoBuffer<Vector<T,N,E1> > >
 
     Vector<T,N,E>(const V &v_) : v(v_) {}
     T operator() (int n) const { return v(n); }
-    int size() const { return v.size(); };
-    bool is_locked() const { return v.is_locked(); };
+    int size() const { return v.size(); }
+    bool is_locked() const { return v.is_locked(); }
 };
 
 /*****************************************************************************
@@ -389,7 +389,7 @@ class Vector<T,R,Multiplied<Matrix<T1,R,C,E1>,Vector<T2,C,E2> > >
         return res;
     }
     int size() const { return m.rows(); }
-    bool is_locked() const { return m.is_locked() || v.is_locked(); };
+    bool is_locked() const { return m.is_locked() || v.is_locked(); }
 };
 
 template <int R,int C,typename T,typename T1,class E1,typename T2,class E2>
@@ -413,9 +413,9 @@ class Vector<T,C,Multiplied<Vector<T1,R,E1>, Matrix<T2,R,C,E2> > >
         return res;
     }
     int size() const { return m.cols(); }
-    bool is_locked() const { return v.is_locked() || m.is_locked(); };
+    bool is_locked() const { return v.is_locked() || m.is_locked(); }
 };
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _VECTOR_H_

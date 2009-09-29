@@ -24,7 +24,7 @@ namespace etLAP {
 
 template <class C> struct Traits;
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #include "Tags.h"
 
@@ -82,7 +82,7 @@ template <> struct Traits<OpMul> { static const int costs = 1; };
 template <> struct Traits<OpDiv> { static const int costs = 1; };
 template <> struct Traits<OpRevMul> { static const int costs = 1; };
 
-}; // namespace etLAP
+} // namespace etLAP
 
 //#include "Vector.h"
 //#include "Matrix.h"
@@ -116,6 +116,6 @@ struct Traits<Multiplied<Vector<T1,N1,E1>,Matrix<T2,R2,C2,E2> > > {
     static const int costs = factor * (Traits<E1>::costs + Traits<E2>::costs + Traits<OpMul>::costs);
 };
 
-}; // namespace etLAP
+} // namespace etLAP
 
 #endif // _ETLAP_COSTS_H_
