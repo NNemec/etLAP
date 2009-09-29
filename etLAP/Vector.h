@@ -21,7 +21,7 @@
 #define _VECTOR_H_
 
 #include "Common.h"
-#include "Tupel.h"
+#include "Tuple.h"
 
 namespace etLAP {
 
@@ -51,7 +51,7 @@ class Vector<T,N,Smart>
 
     void resize(int sz_) { assert(sz_ == N); };
     void clear() { for(int n=N;n-->0;) etLAP::clear(data[n]); };
-    
+
     const T operator() (int n) const { return data[n]; };
     T &operator() (int n,bool unsafe=false) { return data[n]; };
 
@@ -168,10 +168,10 @@ inline void assign(Vector<TD,ND,ED> &dest,const Vector<TS,NS,ES> &src,CAST_TAG) 
         assign(dest(i,true),src(i));
 };
 
-// Vector = Tupel
+// Vector = Tuple
 
 template <typename TD,int ND,class E,typename TS,int NS,class CAST_TAG>
-inline void assign(Vector<TD,ND,E> &dest,const Tupel<TS,NS> &src,CAST_TAG) {
+inline void assign(Vector<TD,ND,E> &dest,const Tuple<TS,NS> &src,CAST_TAG) {
     CTAssert(ND == NS || ND == 0);
     dest.resize(NS);
     dest.prepare_write_noclone();

@@ -23,7 +23,7 @@
 #include <etLAP/Matrix.h>
 #include <etLAP/Operator.h>
 #include <etLAP/Output.h>
-#include <etLAP/Tupel.h>
+#include <etLAP/Tuple.h>
 
 #include <iostream>
 #include <string>
@@ -34,8 +34,8 @@ using namespace etLAP;
 using namespace std;
 
 int main() {
-    Vector<double,2> L = tupel(1,1);
-    Vector<double,2> G = tupel(1,1);
+    Vector<double,2> L = tuple(1,1);
+    Vector<double,2> G = tuple(1,1);
     Matrix<double,2,2> Q = 1;
     Vector<double,2> res = Q*buf(G+Q*L);
     cout << res << "\n";
@@ -49,6 +49,6 @@ int main() {
     cout << &(v(0)) << "\n";
     cout << &(v(1)) << "\n";
 //    cout << &(v(0)(0,0)) << "\n";
-//    Vector<int,3> v = tupel(3,4,5);
+//    Vector<int,3> v = tuple(3,4,5);
 */
 };

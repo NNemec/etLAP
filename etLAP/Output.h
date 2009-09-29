@@ -55,7 +55,7 @@ ostream &operator<<(ostream &o,const Matrix<T,R,C,E> &m) {
 };
 
 template <typename T,int N>
-ostream &operator<<(ostream &o,const Tupel<T,N> &t) {
+ostream &operator<<(ostream &o,const Tuple<T,N> &t) {
     o << "(" << setw(10) << setprecision(8) << setiosflags(ios::fixed) << t[0];
     for(int n=1;n<N;n++)
         o << "," << setw(10) << setprecision(8) << setiosflags(ios::fixed) << t[n];
