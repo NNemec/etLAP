@@ -493,9 +493,9 @@ class Matrix<T,0,0,Scalar>
     const T operator() (int r,int c) const { return r==c?s:(T)0; }
     T &operator() () { return s; }
     const T operator[] (int n) const { assert(false); throw 0; };
-    
+
     void clear() { etLAP::clear(s); };
-    
+
     int rows() const { return sz; }
     int cols() const { return sz; }
 };
@@ -674,7 +674,7 @@ class Matrix<T,R,1,Column<Vector<T1,R,E1> > >
 
     Matrix<T,R,1,E>(const V &restrict v_) : v(v_) {}
     const T operator() (int r,int c) const { return v(r); }
-    const T operator[] (int n) const { return v(r); }
+    const T operator[] (int n) const { return v(n); }
     int rows() const { return v.size(); };
     int cols() const { return 1; };
     bool is_locked() const { return v.is_locked(); };
@@ -693,7 +693,7 @@ class Matrix<T,1,C,Row<Vector<T1,C,E1> > >
 
     Matrix<T,1,C,E>(const V &restrict v_) : v(v_) {};
     const T operator() (int r,int c) const { return v(c); };
-    const T operator[] (int n) const { return v(c); };
+    const T operator[] (int n) const { return v(n); };
     int rows() const { return 1; };
     int cols() const { return v.size(); };
     bool is_locked() const { return v.is_locked(); };

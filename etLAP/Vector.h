@@ -398,7 +398,7 @@ class Vector<T,C,Multiplied<Vector<T1,R,E1>, Matrix<T2,R,C,E2> > >
     typedef Vector<T1,R,E1> V;
     typedef Matrix<T2,R,C,E2> M;
     typedef Multiplied<V,M> E;
-    typedef Vector<T,N,E> SAME;
+    typedef Vector<T,C,E> SAME;
 
     const typename V::Ref_t v;
     const typename M::Ref_t m;

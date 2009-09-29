@@ -32,6 +32,7 @@ class complex;
 #define std__complex std::complex
 #endif
 
+#include <complex>
 #include "Util.h"
 #include "Tags.h"
 
@@ -111,6 +112,12 @@ double sqr(double x) { return x*x; };
 long double sqr(long double x) { return x*x; };
 template <typename T>
 T sqr(std__complex<T> x) { T r=real(x),i=imag(x); return r*r+i*i; };
+
+int max(int a,int b) { return a>b?a:b; };
+uint max(uint a,uint b) { return a>b?a:b; };
+float max(float a,float b) { return a>b?a:b; };
+double max(double a,double b) { return a>b?a:b; };
+long double max(long double a,long double b) { return a>b?a:b; };
 
 /*******************************************************************************
  * UnaryOp

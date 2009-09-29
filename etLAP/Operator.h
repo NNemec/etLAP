@@ -154,7 +154,7 @@ inline const typename UnaryOp<OpAbs,T>::Result_t max(Matrix<T,R,C,E> a) {
 //    typeof(abs(T(0)) res = 0;
     for (int r = a.rows(); r-- > 0;)
     for (int c = a.cols(); c-- > 0;)
-        res = res >? abs(a(r,c));
+        res = max(res,abs(a(r,c)));
     return res;
 };
 
@@ -166,7 +166,7 @@ inline const typename UnaryOp<OpAbs,T>::Result_t simplemax(Matrix<T,R,C,E> a) {
 //    typeof(abs(T(0)) res = 0;
     for (int r = a.rows(); r-- > 0;)
     for (int c = a.cols(); c-- > 0;)
-        res = res >? fabs(a(r,c));
+        res = max(res,fabs(a(r,c)));
     return res;
 };
 
@@ -178,7 +178,7 @@ inline const typename UnaryOp<OpAbs,T>::Result_t simplemax(Matrix<std__complex<T
 //    typeof(abs(T(0)) res = 0;
     for (int r = a.rows(); r-- > 0;)
     for (int c = a.cols(); c-- > 0;)
-        res = res >? fabs(real(a(r,c))) >? fabs(imag(a(r,c)));
+        res = max(res,max(fabs(real(a(r,c))),fabs(imag(a(r,c)))));
     return res;
 };
 
@@ -217,11 +217,12 @@ inline const Matrix<T,N,N> exp(Matrix<T,N,N,E> a) {
             if(res1 == res2)
                 return res1;
         };
+/*
         std::cerr << "exp(Matrix) failed:\n"
                      "a=" << a << "\n"
                      "res1=" << res1 << "\n"
                      "res2=" << res2 << "\n";
-/*
+
         std::cerr << a;
         std::cerr << res1;
         std::cerr << res2;
