@@ -21,3 +21,38 @@ in the code in any way, please contact me. Every user I know of will add
 to the chance I spend time on the project.
 
 Norbert Nemec <nnemec@users.sourceforge.net>
+
+=========================
+
+Assign policies & Smart data types
+----------------------------------
+
+In an Array assignment
+    A = B + C;
+it is not possible to find out at compile time whether the lhs array also appears somewhere
+in the rhs expression. As this might cause undefined results, one of several policies has to
+be chose to deal with this.
+
+    AP_manual
+        The user himself has to make sure that this case does not occur. An expression
+            A = B * A;
+        will trigger an assertion error. To prevent this, the user has to introduce
+        a buffering step:
+            A = buf(B*A);
+        This mechanism is switched off by NDEBUG
+
+    AP_automatic
+        etLAP itself determines conflicts at runtime and performs buffering automatically.
+        This causes some overhead even when NDEBUG is active.
+
+    AP_conservative
+        Assignments are always buffered. This cause considerable overhead
+
+    AP_norefs
+        Assignments are never buffered. Checking is disabled. Dangerous...
+
+The above policies are implemented in the Smart version of arrays. As an alternative,
+the Packed version exists that is equivalent to AP_norefs and furthermore guarantees
+that no fields besides the numerical data itself are introduced in the class. An array of packed arrays
+is therefore continuous in memory.
+
