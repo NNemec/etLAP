@@ -33,17 +33,20 @@ CXXFLAGS += -DASSIGN_POLICY=AP_manual
 CXX = g++
 #CXX = mpiCC
 
+test_vector: test_vector.cpp
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@
+
 sun_gen: sun_gen.cpp etLAP/*.h Makefile
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) sun_gen.cpp -o sun_gen
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@
 
 try_octave: try_octave.cpp etLAP/*.h Makefile
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) try_octave.cpp -L/usr/lib/octave-2.1.35 -loctave -lcruft -lblas -llapack -ldl -lreadline -lfftw -lkpathsea -lg2c -o try_octave
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@ -L/usr/lib/octave-2.1.35 -loctave -lcruft -lblas -llapack -ldl -lreadline -lfftw -lkpathsea -lg2c
 
 try_gsl: try_gsl.cpp etLAP/*.h Makefile
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) try_gsl.cpp -lgsl -lcblas -latlas -o try_gsl
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@ -lgsl -lcblas -latlas
 
 exp: exp.cpp etLAP/*.h Makefile
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) exp.cpp -o exp 
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@
 
 benchmark: exp
 	@uname -a >> benchmarks
@@ -53,10 +56,10 @@ benchmark: exp
 	@echo >> benchmarks
 
 fsimple: fsimple.cpp etLAP/*.h Makefile
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) fsimple.cpp -o fsimple 
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@
 
 tryout: tryout.cpp etLAP/*.h Makefile
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) tryout.cpp -o tryout
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@
 
 clean:
 	rm -f *.ii *.o *.s
