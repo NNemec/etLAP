@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_TUPLE_H_
-#define _ETLAP_TUPLE_H_
+#pragma once
 
 #include "Util.h"
 
@@ -89,5 +88,3 @@ inline Tuple<T,1> _tuple_(const T &t) {
 #endif
 
 } // namespace etLAP
-
-#endif // _ETLAP_TUPLE_H_

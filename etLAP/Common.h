@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_COMMON_H_
-#define _ETLAP_COMMON_H_
+#pragma once
 
 #ifndef ASSIGN_POLICY
 #define ASSIGN_POLICY AP_manual
@@ -146,5 +145,3 @@ class Common_Packed
 };
 
 } // namespace etLAP
-
-#endif // _ETLAP_COMMON_H_

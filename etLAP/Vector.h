@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _VECTOR_H_
-#define _VECTOR_H_
+#pragma once
 
 #include "Common.h"
 #include "Tuple.h"
@@ -417,5 +416,3 @@ class Vector<T,C,Multiplied<Vector<T1,R,E1>, Matrix<T2,R,C,E2> > >
 };
 
 } // namespace etLAP
-
-#endif // _VECTOR_H_

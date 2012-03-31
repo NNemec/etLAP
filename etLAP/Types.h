@@ -17,20 +17,13 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_TYPES_H_
-#define _ETLAP_TYPES_H_
+#pragma once
 
-#if __GNUC__==2
-template <typename T>
-class complex;
-#define std__complex complex
-#else
 namespace std {
 template <typename T>
 class complex;
 }
 #define std__complex std::complex
-#endif
 
 #include <complex>
 #include "Util.h"
@@ -105,19 +98,19 @@ struct TypeCast<std__complex<T>,std__complex<T> > {
  * Additional routines for numeric types
  */
 
-int sqr(int x) { return x*x; }
-uint sqr(uint x) { return x*x; }
-float sqr(float x) { return x*x; }
-double sqr(double x) { return x*x; }
-long double sqr(long double x) { return x*x; }
+inline int sqr(int x) { return x*x; }
+inline uint sqr(uint x) { return x*x; }
+inline float sqr(float x) { return x*x; }
+inline double sqr(double x) { return x*x; }
+inline long double sqr(long double x) { return x*x; }
 template <typename T>
-T sqr(std__complex<T> x) { T r=real(x),i=imag(x); return r*r+i*i; }
+inline T sqr(std__complex<T> x) { T r=real(x),i=imag(x); return r*r+i*i; }
 
-int max(int a,int b) { return a>b?a:b; }
-uint max(uint a,uint b) { return a>b?a:b; }
-float max(float a,float b) { return a>b?a:b; }
-double max(double a,double b) { return a>b?a:b; }
-long double max(long double a,long double b) { return a>b?a:b; }
+inline int max(int a,int b) { return a>b?a:b; }
+inline uint max(uint a,uint b) { return a>b?a:b; }
+inline float max(float a,float b) { return a>b?a:b; }
+inline double max(double a,double b) { return a>b?a:b; }
+inline long double max(long double a,long double b) { return a>b?a:b; }
 
 /*******************************************************************************
  * UnaryOp
@@ -336,5 +329,3 @@ DEFINE_CPX_ASSIGNMENT(/=,assign_div)
 #undef DEFINE_CPX_ASSIGNMENT
 
 } // namespace etLAP
-
-#endif // _ETLAP_TYPES_H_

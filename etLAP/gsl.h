@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _GSL_H_
-#define _GSL_H_
+#pramga once
 
 #include "Matrix.h"
 #include "Vector.h"
@@ -212,5 +211,3 @@ inline const Matrix<double,N,N> gsl_inv_sqrt(Matrix<double,N,N,E> a) {
 };
 
 }; // namespace etLAP
-
-#endif // _GSL_H_

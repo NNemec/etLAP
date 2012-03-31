@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_MATRIX_H_
-#define _ETLAP_MATRIX_H_
+#pragma once
 
 #include "Common.h"
 
@@ -800,5 +799,3 @@ class Matrix<T,R,C,Multiplied<Matrix<T1,R1,C1,E1>,Matrix<T2,R2,C2,E2> > >
 };
 
 } // namespace etLAP
-
-#endif // _ETLAP_MATRIX_H_

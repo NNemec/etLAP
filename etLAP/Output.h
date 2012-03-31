@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_OUTPUT_H_
-#define _ETLAP_OUTPUT_H_
+#pragma once
 
 #include "Vector.h"
 #include "Matrix.h"
@@ -64,5 +63,3 @@ ostream &operator<<(ostream &o,const Tuple<T,N> &t) {
 }
 
 } // namespace etLAP
-
-#endif // _ETLAP_OUTPUT_H_

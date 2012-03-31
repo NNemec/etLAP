@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_TAGS_H_
-#define _ETLAP_TAGS_H_
+#pragma once
 
 namespace etLAP {
 
@@ -90,5 +89,3 @@ class OpIsNeq;
 class OpRevMul;
 
 } // namespace etLAP
-
-#endif // _ETLAP_TAGS_H_

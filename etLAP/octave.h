@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _OCTAVE_H_
-#define _OCTAVE_H_
+#pragma once
 
 #include "Matrix.h"
 #include "Vector.h"
@@ -138,5 +137,3 @@ inline const Matrix<std__complex<double>,N,N,Octave> octave_exp(Matrix<std__comp
 
 
 }; // namespace etLAP
-
-#endif // _OCTAVE_H_

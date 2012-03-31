@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_COSTS_H_
-#define _ETLAP_COSTS_H_
+#pragma once
 
 namespace etLAP {
 
@@ -117,5 +116,3 @@ struct Traits<Multiplied<Vector<T1,N1,E1>,Matrix<T2,R2,C2,E2> > > {
 };
 
 } // namespace etLAP
-
-#endif // _ETLAP_COSTS_H_

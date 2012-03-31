@@ -527,3 +527,19 @@ g++ -Wall -std=c++0x -pedantic -O3 -DASSIGN_POLICY=AP_manual -I. -DNDEBUG
 FIX D:   3 N: 10000000 tr:   107.5855 time:     0.2600
 VAR D:   3 N: 10000000 tr:   107.5855 time:     1.5400
 
+Linux mumble 3.2.0-18-generic #29-Ubuntu SMP Fri Mar 9 21:36:08 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+Sa 31. Mär 19:23:08 CEST 2012
+g++ -Wall -std=c++0x -pedantic -O3 -DASSIGN_POLICY=AP_manual -I. -DNDEBUG
+
+Linux mumble 3.2.0-18-generic #29-Ubuntu SMP Fri Mar 9 21:36:08 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+Sa 31. Mär 19:23:44 CEST 2012
+g++ -Wall -std=c++0x -pedantic -O3 -DASSIGN_POLICY=AP_manual -I. -DNDEBUG
+FIX D:   3 N: 10000000 tr:   107.5855 time:     0.2900
+VAR D:   3 N: 10000000 tr:   107.5855 time:     1.7500
+
+Linux mumble 3.2.0-18-generic #29-Ubuntu SMP Fri Mar 9 21:36:08 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+Sa 31. Mär 19:31:31 CEST 2012
+g++ -Wall -std=c++0x -pedantic -O3 -DASSIGN_POLICY=AP_manual -I. -DNDEBUG
+FIX D:   3 N: 10000000 tr:   107.5855 time:     0.2800
+VAR D:   3 N: 10000000 tr:   107.5855 time:     1.6200
+

@@ -17,9 +17,6 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_OPERATOR_H_
-#define _ETLAP_OPERATOR_H_
-
 #include "Tags.h"
 #include "Types.h"
 #include "Vector.h"
@@ -737,20 +734,18 @@ operator*=(Matrix<T1,R1,C1,E1> &m1,const Matrix<T2,N2,N2,E2> &m2) {
  */
 
 template <typename T>
-void clear(T &t) {
+inline void clear(T &t) {
     t = (T)0;
 }
 
 template <typename T,int N,class E>
-void clear(Vector<T,N,E> &v) {
+inline void clear(Vector<T,N,E> &v) {
     v.clear();
 }
 
 template <typename T,int R,int C,class E>
-void clear(Matrix <T,R,C,E> &m) {
+inline void clear(Matrix <T,R,C,E> &m) {
     m.clear();
 }
 
 } // namespace etLAP
-
-#endif // _ETLAP_OPERATOR_H_

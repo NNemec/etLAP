@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_SU_N_H_
-#define _ETLAP_SU_N_H_
+#pragma once
 
 #include "Common.h"
 #include "Traits.h"
@@ -252,5 +251,3 @@ inline Matrix<std::complex<REAL>,N,N> SUN_from_suN(const Vector<REAL,N==1?1:(N*N
 }
 
 } // namespace etLAP
-
-#endif // _ETLAP_SU_N_H_

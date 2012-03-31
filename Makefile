@@ -52,7 +52,7 @@ benchmark: exp
 	@uname -a >> benchmarks
 	@date >> benchmarks
 	@echo $(CXX) $(CXXFLAGS) $(CPPFLAGS) >> benchmarks
-	@exp | tee -a benchmarks
+	@./exp | tee -a benchmarks
 	@echo >> benchmarks
 
 fsimple: fsimple.cpp etLAP/*.h Makefile

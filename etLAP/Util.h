@@ -17,8 +17,7 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _ETLAP_UTIL_H_
-#define _ETLAP_UTIL_H_
+#pragma once
 
 #include <cstdlib>
 
@@ -42,5 +41,3 @@ template<> struct CTAssertClass<true> { static void test() {} };
 #define restrict __restrict__
 
 } // namespace etLAP
-
-#endif // _ETLAP_UTIL_H_
